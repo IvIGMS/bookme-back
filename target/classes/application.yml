@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: bookme-back
+  datasource:
+    url: jdbc:postgresql://localhost:5443/bookme
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_KEY:24Mn84.Mah3-45KamNDA2kLmaSDASJEND.34asfmn2358daskdJDSALKNe.12}
+      expiration: 864000000
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+
+info:
+  app:
+    version: 0.0.1-SNAPSHOT
+
