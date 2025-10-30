@@ -7,10 +7,10 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.7</version>
 	</parent>
-	<groupId>com.ivanfrias</groupId>
-	<artifactId>generic-project</artifactId>
+	<groupId>com.mycompany</groupId>
+	<artifactId>bookme</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>generic-project</name>
+	<name>bookme-project</name>
 	<description>Projecto generico con todo lo necesario para registrar users, usar tokens y con las dependencias necesarias para hacer apis con swagger</description>
 	<url/>
 	<licenses>
@@ -195,5 +195,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
