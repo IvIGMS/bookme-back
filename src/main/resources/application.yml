@@ -32,3 +32,8 @@ info:
   app:
     version: @project.version@
 
+#Twilio
+twilio:
+  speech:
+    confidence-threshold: 0.7
+
