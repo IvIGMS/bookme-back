@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "bookme")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class UserEntity extends AuditableEntity {
 
@@ -25,6 +25,9 @@ public class UserEntity extends AuditableEntity {
 
   @Column(nullable = false)
   private String lastname;
+
+  @Column()
+  private String phoneNumber;
 
   @Builder.Default
   @Column(nullable = false)

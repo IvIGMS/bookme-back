@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:postgresql://localhost:5443/bookme
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    locations: >
+      classpath:db/migration/schema,
+      classpath:db/migration/data/common,
+      classpath:db/migration/data/local

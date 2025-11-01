@@ -250,6 +250,9 @@ components:
         lastname:
           type: string
           example: 123456
+        phoneNumber:
+          type: string
+          example: 600000000
         role:
           $ref: '#/components/schemas/RoleUser'
     AuthenticationDTO:
