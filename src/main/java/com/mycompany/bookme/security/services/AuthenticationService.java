@@ -36,13 +36,14 @@ public class AuthenticationService {
     }
     var user =
         UserEntity.builder()
-            .email(request.getEmail())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .firstname(request.getFirstname())
-            .lastname(request.getLastname())
-            .isActive(true)
-            .role(RoleUserEnum.valueOf(request.getRole().getValue()))
-            .build();
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .phoneNumber(request.getPhoneNumber())
+                .isActive(true)
+                .role(RoleUserEnum.valueOf(request.getRole().getValue()))
+                .build();
     userRepository.save(user);
 
     org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
