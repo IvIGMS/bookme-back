@@ -25,7 +25,8 @@ public class RestaurantController extends ControllerUtils implements Restaurants
         if (!checkIsUser()) {
             throw new com.ivanfrias.generic_project.exceptions.utils.UnauthorizedException(STRING_NO_PREMISSIONS);
         }
-        Long ownerId = getAllClaims().get("user_id", Long.class);
+        Long ownerId = getUserIdClaim();
+        // todo: arreglar este null y darle una ruta
         return ResponseEntity.created(null).body(
                 restaurantUserService.createRestaurant(restaurantRequestDTO, ownerId));
     }

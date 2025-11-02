@@ -7,8 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -17,22 +16,22 @@ public abstract class AuditableEntity {
 
   @CreatedDate
   @Column(name = "created_at", nullable = false, updatable = false)
-  private ZonedDateTime createdAt;
+  private OffsetDateTime createdAt;
 
   @LastModifiedDate
   @Column(name = "updated_at", nullable = false)
-  private ZonedDateTime updatedAt;
+  private OffsetDateTime updatedAt;
 
   @PrePersist
   void prePersist() {
-    ZonedDateTime now = ZonedDateTime.now();
+    OffsetDateTime now = OffsetDateTime.now();
     if (createdAt == null) createdAt = now;
     if (updatedAt == null) updatedAt = now;
   }
 
   @PreUpdate
   void preUpdate() {
-    updatedAt = ZonedDateTime.now();
+    updatedAt = OffsetDateTime.now();
   }
 }
 
