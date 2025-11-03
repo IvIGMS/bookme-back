@@ -1,4 +1,4 @@
-package com.mycompany.bookme.twilio;
+package com.mycompany.bookme.twilio.controllers;
 
 import java.util.UUID;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.bookme.tools.DateTimeTools;
 import com.mycompany.bookme.twilio.config.TwilioProperties;
 import com.mycompany.bookme.twilio.utils.TwiMLHelper;
 import com.twilio.twiml.VoiceResponse;
@@ -19,7 +20,6 @@ import com.twilio.twiml.voice.Say;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-    
 
 @RestController
 @RequestMapping("/api/v1/voice/bookings/process-speech")
@@ -54,7 +54,7 @@ public class SpeechProcessController {
 //            return getFallbackResponse();
 //        }
         // Lógica basada en confianza
-        final String replyText = chatClient.prompt(""" 
+        final String replyText = chatClient.prompt("""
                         Eres una camarera de un restaurante encargada de agendar reservas en España, así que tienes que parecer Española, utilizando las tools que tienes a tu disposición.
                         Responde en español de manera clara y concisa.
                         Proporciona solo la respuesta que se debe dar al cliente, sin explicaciones adicionales.

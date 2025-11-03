@@ -1,4 +1,4 @@
-package com.mycompany.bookme.twilio;
+package com.mycompany.bookme.twilio.controllers;
 
 import com.mycompany.bookme.twilio.utils.TwiMLHelper;
 import com.twilio.twiml.VoiceResponse;

@@ -1,11 +1,10 @@
-package com.mycompany.bookme.twilio;
-
-import org.springframework.ai.tool.annotation.Tool;
+package com.mycompany.bookme.tools;
 
 import java.time.LocalDateTime;
 
-public class DateTimeTools {
+import org.springframework.ai.tool.annotation.Tool;
 
+public class DateTimeTools {
 
     @Tool(
             name = "get_current_datetime",
