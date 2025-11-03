@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://dev-host:5432/bookme}
+    username: ${DB_USER:bookme}
+    password: ${DB_PASS:change-me}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    locations: >
+      classpath:db/migration/schema,
+      classpath:db/migration/data/common,
+      classpath:db/migration/data/dev

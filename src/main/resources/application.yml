@@ -1,7 +1,6 @@
-server:
-  port: 8080
-
 spring:
+  profiles:
+    default: local
   ai:
     openai:
       api-key: ${OPENAI_API_KEY:your-openai-api-key}
@@ -15,24 +14,43 @@ spring:
           temperature: 0.7
   application:
     name: bookme-back
+
   datasource:
     url: jdbc:postgresql://localhost:5443/bookme
     username: user
     password: password
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
+        default_schema: bookme
         format_sql: true
+
+  flyway:
+    enabled: true
+    locations: >
+      classpath:db/migration/schema,
+      classpath:db/migration/data/common
+    default-schema: flyway
+    schemas: bookme
+    table: flyway_schema_history
+    validate-on-migrate: true
+    baseline-on-migrate: false
+    out-of-order: false
+    clean-disabled: true
 
 application:
   security:
     jwt:
       secret-key: ${JWT_KEY:24Mn84.Mah3-45KamNDA2kLmaSDASJEND.34asfmn2358daskdJDSALKNe.12}
       expiration: 864000000
+
+server:
+  port: 8080
 
 logging:
   level:
@@ -42,6 +60,7 @@ logging:
 info:
   app:
     version: @project.version@
+    active-profile: ${spring.profiles.active:default}
 
 #Twilio
 twilio:
