@@ -23,10 +23,9 @@ public class CustomerService {
     }
 
     public CustomerDTO getCustomerById(Long customerId) {
-        return modelMapper.map(
-                customerRepository.findById(customerId)
-                        .orElseThrow(() -> new NotFoundException("Customer not found: " + customerId)),
-                CustomerDTO.class);
+        return customerRepository.findById(customerId)
+                .map(customer -> modelMapper.map(customer, CustomerDTO.class))
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + customerId));
     }
 
     public CustomerEntity getCustomerEntityById(Long customerId) {
