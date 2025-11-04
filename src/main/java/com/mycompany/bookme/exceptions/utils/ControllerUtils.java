@@ -12,6 +12,8 @@ import java.net.URI;
 
 public abstract class ControllerUtils {
 
+  private final static String CLAIM_USER_ID = "user_id";
+
   @Autowired protected HttpServletRequest request;
 
   @Autowired protected JwtService jwtService;
@@ -33,6 +35,10 @@ public abstract class ControllerUtils {
 
   protected Claims getAllClaims() {
     return jwtService.extractAllClaims(getToken());
+  }
+
+  protected Long getUserIdClaim() {
+    return jwtService.extractAllClaims(getToken()).get(CLAIM_USER_ID, Long.class);
   }
 
   protected String getRole() {
