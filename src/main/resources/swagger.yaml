@@ -5,9 +5,75 @@ info:
 tags:
   - name: auth
     description: Endpoints de autenticación
+  - name: customers
+    description: Endpoints de customers
 security:
   - bearerAuth: []
 paths:
+  /restaurants:
+    post:
+      summary: create a new restaurant
+      description: when you create a new restaurant the owner is the user linked to the token
+      operationId: createRestaurant
+      requestBody:
+        $ref: '#/components/requestBodies/RestaurantCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/RestaurantResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - customers
+  /customers/{customerId}:
+    get:
+      summary: get a customer by id
+      operationId: getCustomerById
+      parameters:
+        - $ref: '#/components/parameters/customerId'
+      responses:
+        '200':
+          $ref: '#/components/responses/CustomerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - customers
+  /customers:
+    post:
+      summary: create a new customer
+      operationId: createCustomer
+      requestBody:
+        $ref: '#/components/requestBodies/CustomerCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/CustomerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - customers
   /users/test:
     get:
       summary: endpoint publico test
@@ -69,6 +135,20 @@ paths:
         - auth
 components:
   requestBodies:
+    CustomerCreateRequestBody:
+      description: Create a customer
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomerRequestDTO'
+    RestaurantCreateRequestBody:
+      description: Create a restaurant
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RestaurantRequestDTO'
     AuthenticationRequestBody:
       description: Login de un user
       required: true
@@ -88,6 +168,12 @@ components:
             $ref: '#/components/schemas/RegisterRequestDTO'
 
   parameters:
+    customerId:
+      name: customerId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/genericId'
     genericId:
       name: genericId
       in: path
@@ -95,6 +181,18 @@ components:
       schema:
         $ref: '#/components/schemas/genericId'
   responses:
+    CustomerResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomerDTO'
+    RestaurantResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RestaurantDTO'
     ReponseTest:
       description: OK.
       content:
@@ -195,6 +293,87 @@ components:
                   One or more fields are invalid. See details for more information.
                 instance: 'https://api.example.com/problems/validation-error/12345'
   schemas:
+    AuditableDTO:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+    RestaurantRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Meson Las Casas
+        address:
+          type: string
+          example: Calle Falsa 123
+        phone:
+          type: string
+          example: 600000000
+      required:
+        - name
+        - address
+        - phone
+    CustomerRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: name
+        lastName:
+          type: string
+          example: lastName
+        phone:
+          type: string
+          example: phone
+        email:
+          type: string
+          example: email
+    RestaurantDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/genericId'
+        name:
+          type: string
+          example: Meson Las Casas
+        address:
+          type: string
+          example: Calle Falsa 123
+        phone:
+          type: string
+          example: 600000000
+        auditable:
+          $ref: '#/components/schemas/AuditableDTO'
+    CustomerDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/genericId'
+        name:
+          type: string
+          example: name
+        lastName:
+          type: string
+          example: lastName
+        phone:
+          type: string
+          example: phone
+        email:
+          type: string
+          example: email
+        auditable:
+          $ref: '#/components/schemas/AuditableDTO'
+      required:
+        - name
+        - lastName
+        - phone
     UserDTO:
       type: object
       properties:
