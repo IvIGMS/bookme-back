@@ -1,4 +1,4 @@
-package com.mycompany.bookme.twilio.intents;
+package com.mycompany.bookme.twilio.dto;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -2,9 +2,10 @@ package com.mycompany.bookme.twilio.services;
 
 import java.util.UUID;
 
-import com.mycompany.bookme.twilio.intents.IntentType;
-import com.mycompany.bookme.twilio.intents.ReplayTextIntentFactory;
-import com.mycompany.bookme.twilio.intents.ReplyTextIntent;
+import com.mycompany.bookme.twilio.dto.ConversationCtx;
+import com.mycompany.bookme.twilio.dto.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentTypeFactory;
+import com.mycompany.bookme.twilio.intents.IntentStrategy;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -29,7 +30,7 @@ public class SpeechProcessService {
     private final TwilioProperties twilioProperties;
     private final ChatMemory chatMemory;
     private final DetectIntentWithAIService detectIntentWithAIService;
-    private final ReplayTextIntentFactory replayTextIntentFactory;
+    private final IntentTypeFactory replayTextIntentTypeFactory;
 
     public String processSpeechResult(
             @RequestParam(value = "SpeechResult", required = false) String speechResult,
@@ -44,7 +45,7 @@ public class SpeechProcessService {
         String conversationId = getConversationId(callSid);
         saveUserChatMemory(conversationId, speechResult);
         IntentType intent = detectIntentWithAIService.detect(speechResult);
-        String replyText = getReplayText(intent);
+        String replyText = getReplyText(intent, new ConversationCtx());
         saveSystemChatMemory(conversationId, replyText);
         return buildTwilioResponse(replyText);
     }
@@ -57,10 +58,10 @@ public class SpeechProcessService {
                 .toXml();
     }
 
-    private String getReplayText(IntentType intent) {
+    private String getReplyText(IntentType intent, ConversationCtx ctx) {
         log.info("Generating reply text for intent: {}", intent);
-        ReplyTextIntent strategy = replayTextIntentFactory.getReplyTextIntentStrategy(intent);
-        String replyText = strategy.getReplyText();
+        IntentStrategy strategy = replayTextIntentTypeFactory.getReplyTextIntentStrategy(intent);
+        String replyText = strategy.getReplyText(ctx);
         log.info("Reply text generated for intent {}: {}", intent, replyText);
         return replyText;
     }
