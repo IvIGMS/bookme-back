@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class DetectIntentService {
+public class DetectIntentWithAIService {
     private static final String PROMPT = """
             Dada la frase de un cliente en un restaurante español, clasifica su intención
             en una de las siguientes categorías exactas: %s.
@@ -21,10 +21,12 @@ public class DetectIntentService {
     private final ChatClient chatClient;
 
     public IntentType detect(String userInput) {
-        log.debug("Detecting intent for user input: {}", userInput);
+        log.info("Detecting intent for user input: {}", userInput);
         String intentTypes = getIntentTypesDelimitedByCommas();
         String classification = getLlmClassification(userInput, intentTypes);
-        return IntentType.fromStringOrDefault(classification);
+        IntentType intentType = IntentType.fromStringOrDefault(classification);
+        log.info("Detected intent type: {}", intentType);
+        return intentType;
     }
 
     private String getLlmClassification(String userInput, String intentTypes) {
