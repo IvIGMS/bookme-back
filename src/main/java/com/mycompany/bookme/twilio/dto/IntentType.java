@@ -6,14 +6,17 @@ import java.util.*;
 
 @Slf4j
 public enum IntentType {
-    BOOK_TABLE,         // intención inicial de reservar
+    BOOK_TABLE,
     CANCEL_RESERVATION,
+    MODIFY_RESERVATION,
+    CONFIRM_RESERVATION,
+    DECLINE_RESERVATION,
     ASK_OPENING_HOURS,
-    ASK_MENU,
-    PROVIDE_TIME,       // el usuario sólo dio la hora
-    PROVIDE_DATE,       // el usuario sólo dio el día/fecha
-    PROVIDE_PARTY_SIZE, // el usuario sólo dio el nº de personas
-    CONFIRMATION,       // sí / no
+    PROVIDE_TIME,
+    PROVIDE_DATE,
+    PROVIDE_DATE_TIME,
+    PROVIDE_PARTY_SIZE,
+    PROVIDE_DATE_TIME_PARTY_SIZE,
     UNKNOWN;
 
     private static final IntentType[] VALUES = values();

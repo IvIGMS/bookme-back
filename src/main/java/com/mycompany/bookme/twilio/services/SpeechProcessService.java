@@ -44,6 +44,7 @@ public class SpeechProcessService {
         }
         String conversationId = getConversationId(callSid);
         saveUserChatMemory(conversationId, speechResult);
+        //TODO: Usar algún modelo local para detectar la intención en lugar de llamar siempre al servicio AI, puede tardar bastante (1-3 segundos)
         IntentType intent = detectIntentWithAIService.detect(speechResult);
         String replyText = getReplyText(intent, new ConversationCtx());
         saveSystemChatMemory(conversationId, replyText);
