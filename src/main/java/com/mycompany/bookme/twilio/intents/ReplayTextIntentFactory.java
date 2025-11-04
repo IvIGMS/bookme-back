@@ -1,6 +1,5 @@
 package com.mycompany.bookme.twilio.intents;
 
-import com.mycompany.bookme.twilio.dto.IntentType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

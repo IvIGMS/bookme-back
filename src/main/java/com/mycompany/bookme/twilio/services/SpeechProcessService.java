@@ -2,18 +2,14 @@ package com.mycompany.bookme.twilio.services;
 
 import java.util.UUID;
 
-import com.mycompany.bookme.twilio.dto.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentType;
 import com.mycompany.bookme.twilio.intents.ReplayTextIntentFactory;
 import com.mycompany.bookme.twilio.intents.ReplyTextIntent;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.bookme.twilio.config.TwilioProperties;
 import com.mycompany.bookme.twilio.utils.TwiMLHelper;
