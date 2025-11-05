@@ -5,6 +5,7 @@ import com.mycompany.bookme.twilio.intents.IntentType;
 import com.mycompany.bookme.twilio.intents.IntentTypeFactory;
 import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class SpeechProcessService {
         //TODO: Usar algún modelo local para detectar la intención en lugar de llamar siempre al servicio AI, puede tardar bastante (1-3 segundos)
         IntentType intent = detectIntentWithAIService.detect(userInput, callSid);
         String replyText = getReplyText(intent, ctx);
-        addSystemChatMemory(callSid, replyText);
+        addAssistantChatMemory(callSid, replyText);
         return buildTwilioResponse(replyText);
     }
 
@@ -73,8 +74,8 @@ public class SpeechProcessService {
         return replyText;
     }
 
-    private void addSystemChatMemory(String conversationId, String replyText) {
-        chatMemory.add(conversationId, SystemMessage.builder().text(replyText).build());
+    private void addAssistantChatMemory(String conversationId, String replyText) {
+        chatMemory.add(conversationId, new AssistantMessage(replyText));
     }
 
     private void addUserChatMemory(String conversationId, String text) {
