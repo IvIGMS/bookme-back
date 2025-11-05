@@ -92,7 +92,7 @@ public class SpeechProcessService {
     }
 
     private static String getFallbackResponse() {
-        return buildTwilioResponse("En que podemos ayudarle? No he podido escuchar su respuesta claramente.");
+        return buildTwilioResponse("¿En qué podemos ayudarle? No he podido escuchar su respuesta claramente.");
     }
 
     private static Double parse(String confidenceStr) {
