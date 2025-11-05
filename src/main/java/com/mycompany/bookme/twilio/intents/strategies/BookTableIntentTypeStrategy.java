@@ -1,12 +1,10 @@
 package com.mycompany.bookme.twilio.intents.strategies;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.bookme.tools.DateTimeTools;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
-import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import com.mycompany.bookme.twilio.intents.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;

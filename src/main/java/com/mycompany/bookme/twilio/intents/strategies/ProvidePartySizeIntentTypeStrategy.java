@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalTime;
-
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

@@ -2,8 +2,8 @@ package com.mycompany.bookme.twilio.intents.strategies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
-import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import com.mycompany.bookme.twilio.intents.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
