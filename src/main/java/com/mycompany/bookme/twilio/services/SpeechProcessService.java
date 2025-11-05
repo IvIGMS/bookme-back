@@ -42,10 +42,10 @@ public class SpeechProcessService {
             return getFallbackResponse();
         }
         validate(callSid);
-        ConversationCtx ctx = updateCtxWithUserInput(userInput, callSid);
         addUserChatMemory(callSid, userInput);
+        ConversationCtx ctx = updateCtxWithUserInput(userInput, callSid);
         //TODO: Usar algún modelo local para detectar la intención en lugar de llamar siempre al servicio AI, puede tardar bastante (1-3 segundos)
-        IntentType intent = detectIntentWithAIService.detect(userInput);
+        IntentType intent = detectIntentWithAIService.detect(userInput, callSid);
         String replyText = getReplyText(intent, ctx);
         addSystemChatMemory(callSid, replyText);
         return buildTwilioResponse(replyText);

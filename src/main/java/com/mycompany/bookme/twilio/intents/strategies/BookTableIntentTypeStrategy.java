@@ -42,6 +42,8 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
                         Responde solo con el JSON solicitado, sin explicaciones adicionales.
                         Si no puedes extraer alguno de los datos, asigna null a esa clave, sin comillas, por ejemplo: "partySize": null.
                         Ten en cuenta que la hora puede estar en formato de 12 horas con AM/PM o en formato de 24 horas.
+                        Importante: Ten en cuenta el contexto de la conversación previa para interpretar correctamente la solicitud del usuario.
+                        Importante: No te inventes la fecha y la hora, solo extrae lo que el usuario ha mencionado en su mensaje, solo utiliza la fecha proporcionada por la tool para calcular fechas relativas como "el próximo viernes" o "dentro de dos semanas".
                         """)
                 .user(ctx.getCurrentUserMessage())
                 .tools(new DateTimeTools())
@@ -61,10 +63,8 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
 
         } catch (IllegalArgumentException e) {
             return "Lo siento, no pude entender su solicitud. ¿Podría reformularla?";
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return "Lo siento, hubo un error al procesar su solicitud. ¿Podría intentarlo de nuevo?";
         }
 
         if (isNull(ctx.getReservationDate())) {
