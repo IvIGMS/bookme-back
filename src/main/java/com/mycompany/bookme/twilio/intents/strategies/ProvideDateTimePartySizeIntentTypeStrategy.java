@@ -22,7 +22,7 @@ public class ProvideDateTimePartySizeIntentTypeStrategy implements IntentTypeStr
 
     @Override
     public IntentType getSupportedIntent() {
-        return IntentType.PROVIDE_DATE_TIME_PARTY_SIZE;
+        return IntentType.PROVIDE_DATE_AND_TIME_AND_PARTY_SIZE;
     }
 
     @Override

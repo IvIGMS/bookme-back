@@ -14,9 +14,9 @@ public enum IntentType {
     ASK_OPENING_HOURS,
     PROVIDE_TIME,
     PROVIDE_DATE,
-    PROVIDE_DATE_TIME,
+    PROVIDE_DATE_AND_TIME,
     PROVIDE_PARTY_SIZE,
-    PROVIDE_DATE_TIME_PARTY_SIZE,
+    PROVIDE_DATE_AND_TIME_AND_PARTY_SIZE,
     UNKNOWN;
 
     private static final IntentType[] VALUES = values();

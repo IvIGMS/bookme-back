@@ -76,19 +76,24 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
 
     private static String getSystemInstructions() {
         return """
-                Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
-                Extrae la siguiente información de la solicitud del usuario:
-                1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
-                2. Hora de la reserva (reservationHour) (formato:HH:mm)
-                3. Número de personas (partySize) (entero)
-                Responde siempre en formato JSON con las claves: reservationDate, reservationHour, partySize
-                Proporciona la respuesta en el siguiente formato:
-                {"reservationDate": "yyyy-MM-dd", "reservationHour": "HH:mm", "partySize": N}
-                Responde solo con el JSON solicitado, sin explicaciones adicionales.
-                Si no puedes extraer alguno de los datos, asigna null a esa clave, sin comillas, por ejemplo: "partySize": null.
-                Ten en cuenta que la hora puede estar en formato de 12 horas con AM/PM o en formato de 24 horas.
-                Importante: Ten en cuenta el contexto de la conversación previa para interpretar correctamente la solicitud del usuario.
-                Importante: No te inventes la fecha y la hora, solo extrae lo que el usuario ha mencionado en su mensaje, solo utiliza la fecha proporcionada por la tool para calcular fechas relativas como "el próximo viernes" o "dentro de dos semanas".
-                """;
+        Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
+        Extrae la siguiente información de la solicitud del usuario:
+        1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
+        2. Hora de la reserva (reservationHour) (formato: HH:mm)
+        3. Número de personas (partySize) (entero)
+
+        Responde SIEMPRE en formato JSON con las claves: reservationDate, reservationHour, partySize.
+        Ejemplo de salida: {"reservationDate": "2025-05-21", "reservationHour": "20:00", "partySize": 2}
+
+        Si no puedes extraer alguno de los datos del mensaje del usuario, usa null (sin comillas).
+        Ejemplo: {"reservationDate": null, "reservationHour": "20:00", "partySize": null}
+
+        NO utilices herramientas ni calcules la fecha y hora actuales a menos que el usuario haya dicho algo como
+        "mañana", "el próximo viernes", "en dos días" o frases relativas similares.
+
+        Si el usuario no menciona fecha ni hora de ningún tipo, deja esos campos como null.
+        No infieras ni inventes valores.
+        """;
     }
+
 }
