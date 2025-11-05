@@ -69,13 +69,13 @@ public class ProvideDateTimePartySizeIntentTypeStrategy implements IntentTypeStr
         return """
                 Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
                 Extrae la siguiente información de la solicitud del usuario:
-                1. Fecha de la reserva (reservationDate) (formato: DD/MM/AAAA)
-                2. Hora de la reserva (reservationHour) (formato: HH:MM)
+                1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
+                2. Hora de la reserva (reservationHour) (formato: HH:mm)
                 3. Número de personas (partySize) (entero)
                 Responde siempre en formato JSON con las claves: reservationDate, reservationHour, partySize
                 Si no puedes extraer alguno de los datos, asigna null a esa clave.
                 Proporciona la respuesta en el siguiente formato:
-                {"reservationDate": "DD/MM/AAAA", "reservationHour": "HH:MM", "partySize": N}
+                {"reservationDate": "yyyy-MM-dd", "reservationHour": "HH:mm", "partySize": N}
                 Responde solo con el JSON solicitado, sin explicaciones adicionales.
                 """;
     }
