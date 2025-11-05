@@ -12,8 +12,8 @@ public class ConversationMemory {
     // Map<CallSid, ConversationCtx>
     private final Map<String, ConversationCtx> sessions = new ConcurrentHashMap<>();
 
-    public ConversationCtx get(String phone) {
-        return sessions.get(phone);
+    public ConversationCtx get(String conversationId) {
+        return sessions.get(conversationId);
     }
 
     public ConversationCtx save(String conversationId, ConversationCtx ctx) {
