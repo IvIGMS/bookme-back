@@ -88,7 +88,7 @@ public class SpeechProcessService {
     }
 
     private static boolean isInvalid(String speechResult) {
-        return isNull(speechResult) || speechResult.trim().isEmpty() || speechResult.isBlank();
+        return isNull(speechResult) || speechResult.isBlank();
     }
 
     private static String getFallbackResponse() {
