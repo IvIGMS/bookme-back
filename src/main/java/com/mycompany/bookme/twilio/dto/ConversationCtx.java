@@ -12,6 +12,7 @@ public final class ConversationCtx {
     private LocalDate reservationDate;
     private LocalTime reservationHour;
     private Integer partySize;
+    private String reservationName;
     private String currentUserMessage;
 
     public ConversationCtx(LocalDate reservationDate, LocalTime reservationHour, Integer partySize, String currentUserMessage) {

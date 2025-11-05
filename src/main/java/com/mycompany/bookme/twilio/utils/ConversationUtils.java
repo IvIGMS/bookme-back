@@ -13,12 +13,15 @@ public class ConversationUtils {
             return "¿A qué hora le gustaría reservar la mesa?";
         } else if (isNull(ctx.getPartySize())) {
             return "¿Para cuántas personas sería la reserva?";
+        } else if (isNull(ctx.getReservationName())) {
+            return "¿Cuál es el nombre para la reserva?";
         } else {
             return String.format(
-                    "Entonces, desea reservar una mesa para el %s a las %s, para %d personas. ¿Es correcto?",
+                    "Entonces, desea reservar una mesa para el %s a las %s, para %d personas a nombre de %s. ¿Es correcto?",
                     ctx.getReservationDate(),
                     ctx.getReservationHour(),
-                    ctx.getPartySize());
+                    ctx.getPartySize(),
+                    ctx.getReservationName());
         }
     }
 }

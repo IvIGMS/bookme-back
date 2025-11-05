@@ -16,7 +16,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
 
-    public static final String LOCALE_ES = "es_ES";
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
@@ -46,6 +45,9 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
             if (nonNull(extractedInfo.getPartySize())) {
                 ctx.setPartySize(extractedInfo.getPartySize());
             }
+            if (nonNull(extractedInfo.getReservationName())) {
+                ctx.setReservationName(extractedInfo.getReservationName());
+            }
 
         } catch (Exception e) {
             return "Lo siento, hubo un error al procesar su solicitud. ¿Podría intentarlo de nuevo?";
@@ -56,24 +58,25 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
 
     private static String getSystemInstructions() {
         return """
-        Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
-        Extrae la siguiente información de la solicitud del usuario:
-        1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
-        2. Hora de la reserva (reservationHour) (formato: HH:mm)
-        3. Número de personas (partySize) (entero)
-
-        Responde SIEMPRE en formato JSON con las claves: reservationDate, reservationHour, partySize.
-        Ejemplo de salida: {"reservationDate": "2025-05-21", "reservationHour": "20:00", "partySize": 2}
-
-        Si no puedes extraer alguno de los datos del mensaje del usuario, usa null (sin comillas).
-        Ejemplo: {"reservationDate": null, "reservationHour": "20:00", "partySize": null}
-
-        NO utilices herramientas ni calcules la fecha y hora actuales a menos que el usuario haya dicho algo como
-        "mañana", "el próximo viernes", "en dos días" o frases relativas similares.
-
-        Si el usuario no menciona fecha ni hora de ningún tipo, deja esos campos como null.
-        No infieras ni inventes valores.
-        """;
+                Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
+                Extrae la siguiente información de la solicitud del usuario:
+                1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
+                2. Hora de la reserva (reservationHour) (formato: HH:mm)
+                3. Número de personas (partySize) (entero)
+                4. Nombre de la reserva (reservationName) (cadena de texto)
+                
+                Responde SIEMPRE en formato JSON con las claves: reservationDate, reservationHour, partySize, reservationName.
+                Ejemplo de salida: {"reservationDate": "2025-05-21", "reservationHour": "20:00", "partySize": 2, "reservationName": "Juan Pérez"}
+                
+                Si no puedes extraer alguno de los datos del mensaje del usuario, usa null (sin comillas).
+                Ejemplo: {"reservationDate": null, "reservationHour": "20:00", "partySize": null, "reservationName": null}
+                
+                NO utilices herramientas ni calcules la fecha y hora actuales a menos que el usuario haya dicho algo como
+                "mañana", "el próximo viernes", "en dos días" o frases relativas similares.
+                
+                Si el usuario no menciona fecha ni hora de ningún tipo, deja esos campos como null.
+                No infieras ni inventes valores.
+                """;
     }
 
 }
