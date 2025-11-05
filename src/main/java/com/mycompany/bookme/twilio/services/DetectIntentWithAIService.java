@@ -1,6 +1,6 @@
 package com.mycompany.bookme.twilio.services;
 
-import com.mycompany.bookme.twilio.dto.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;

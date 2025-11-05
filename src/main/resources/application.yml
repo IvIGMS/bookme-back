@@ -66,4 +66,3 @@ info:
 twilio:
   speech:
     confidence-threshold: 0.7
-

@@ -1,10 +1,13 @@
 package com.mycompany.bookme.twilio.intents.strategies;
 
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
-import com.mycompany.bookme.twilio.dto.IntentType;
-import com.mycompany.bookme.twilio.intents.IntentStrategy;
+import com.mycompany.bookme.twilio.intents.IntentType;
+import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
+import org.springframework.stereotype.Component;
 
-public class CancelReservationIntentStrategy implements IntentStrategy {
+@Component
+public class CancelReservationIntentTypeStrategy implements IntentTypeStrategy {
+
     @Override
     public IntentType getSupportedIntent() {
         return IntentType.CANCEL_RESERVATION;

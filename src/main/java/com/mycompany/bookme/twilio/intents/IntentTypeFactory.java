@@ -1,6 +1,5 @@
 package com.mycompany.bookme.twilio.intents;
 
-import com.mycompany.bookme.twilio.dto.IntentType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,18 +11,21 @@ import java.util.Map;
 @Slf4j
 public class IntentTypeFactory {
 
-    private final Map<IntentType, IntentStrategy> strategies = new EnumMap<>(IntentType.class);
+    private final Map<IntentType, IntentTypeStrategy> strategies = new EnumMap<>(IntentType.class);
 
-    public IntentTypeFactory(List<IntentStrategy> strategies) {
-        for (IntentStrategy strategy : strategies) {
+    public IntentTypeFactory(List<IntentTypeStrategy> strategies) {
+        if(strategies.isEmpty()) {
+            log.warn("No IntentStrategy implementations found!");
+        }
+        for (IntentTypeStrategy strategy : strategies) {
             this.strategies.put(strategy.getSupportedIntent(), strategy);
         }
     }
 
-    public IntentStrategy getReplyTextIntentStrategy(IntentType intentType) {
-        IntentStrategy intentStrategy = strategies.getOrDefault(intentType, strategies.get(IntentType.UNKNOWN));
-        log.info("Using ReplyTextIntent strategy: {} for intent type: {}", intentStrategy.getClass().getSimpleName(), intentType);
-        return intentStrategy;
+    public IntentTypeStrategy getReplyTextIntentStrategy(IntentType intentType) {
+        IntentTypeStrategy intentTypeStrategy = strategies.getOrDefault(intentType, strategies.get(IntentType.UNKNOWN));
+        log.info("Using ReplyTextIntent strategy: {} for intent type: {}", intentTypeStrategy.getClass().getSimpleName(), intentType);
+        return intentTypeStrategy;
     }
 
 }
