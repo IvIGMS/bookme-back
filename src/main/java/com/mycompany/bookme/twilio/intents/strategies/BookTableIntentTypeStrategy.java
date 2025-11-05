@@ -30,21 +30,9 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
     @Override
     public String getReplyText(ConversationCtx ctx) {
 
-        String json = chatClient.prompt("""
-                        Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
-                        Extrae la siguiente información de la solicitud del usuario:
-                        1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
-                        2. Hora de la reserva (reservationHour) (formato:HH:mm)
-                        3. Número de personas (partySize) (entero)
-                        Responde siempre en formato JSON con las claves: reservationDate, reservationHour, partySize
-                        Proporciona la respuesta en el siguiente formato:
-                        {"reservationDate": "yyyy-MM-dd", "reservationHour": "HH:mm", "partySize": N}
-                        Responde solo con el JSON solicitado, sin explicaciones adicionales.
-                        Si no puedes extraer alguno de los datos, asigna null a esa clave, sin comillas, por ejemplo: "partySize": null.
-                        Ten en cuenta que la hora puede estar en formato de 12 horas con AM/PM o en formato de 24 horas.
-                        Importante: Ten en cuenta el contexto de la conversación previa para interpretar correctamente la solicitud del usuario.
-                        Importante: No te inventes la fecha y la hora, solo extrae lo que el usuario ha mencionado en su mensaje, solo utiliza la fecha proporcionada por la tool para calcular fechas relativas como "el próximo viernes" o "dentro de dos semanas".
-                        """)
+        String systemInstructions = getSystemInstructions();
+        String json = chatClient.prompt()
+                .system(systemInstructions)
                 .user(ctx.getCurrentUserMessage())
                 .tools(new DateTimeTools())
                 .call()
@@ -84,5 +72,23 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
                 ctx.getReservationHour(),
                 ctx.getPartySize()
         );
+    }
+
+    private static String getSystemInstructions() {
+        return """
+                Eres un asistente de reservas de restaurantes. Ayudas a los usuarios a reservar mesas.
+                Extrae la siguiente información de la solicitud del usuario:
+                1. Fecha de la reserva (reservationDate) (formato: yyyy-MM-dd)
+                2. Hora de la reserva (reservationHour) (formato:HH:mm)
+                3. Número de personas (partySize) (entero)
+                Responde siempre en formato JSON con las claves: reservationDate, reservationHour, partySize
+                Proporciona la respuesta en el siguiente formato:
+                {"reservationDate": "yyyy-MM-dd", "reservationHour": "HH:mm", "partySize": N}
+                Responde solo con el JSON solicitado, sin explicaciones adicionales.
+                Si no puedes extraer alguno de los datos, asigna null a esa clave, sin comillas, por ejemplo: "partySize": null.
+                Ten en cuenta que la hora puede estar en formato de 12 horas con AM/PM o en formato de 24 horas.
+                Importante: Ten en cuenta el contexto de la conversación previa para interpretar correctamente la solicitud del usuario.
+                Importante: No te inventes la fecha y la hora, solo extrae lo que el usuario ha mencionado en su mensaje, solo utiliza la fecha proporcionada por la tool para calcular fechas relativas como "el próximo viernes" o "dentro de dos semanas".
+                """;
     }
 }

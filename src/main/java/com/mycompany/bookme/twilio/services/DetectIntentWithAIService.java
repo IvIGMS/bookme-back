@@ -55,34 +55,21 @@ public class DetectIntentWithAIService {
 
         String userInstruction = "Frase a clasificar: \"" + userInput.trim() + "\"";
 
-        String content = chatClient
+        String llmIntentClassification = chatClient
                 .prompt(prompt)
                 .system(systemInstruction)
                 .user(userInstruction)
                 .call()
                 .content();
 
-        if (content == null || content.trim().isEmpty()) {
+        if (llmIntentClassification == null || llmIntentClassification.trim().isEmpty()) {
             log.warn("LLM returned null or empty classification, defaulting to UNKNOWN");
             return IntentType.UNKNOWN.name();
         }
 
-        String llmIntentClassification = sanitizeLlmOutput(content);
         log.info("LLM classified user input as intent type '{}'", llmIntentClassification);
-        return llmIntentClassification;
+        return llmIntentClassification.trim();
     }
 
-    private static String sanitizeLlmOutput(String raw) {
-        // Keep only first token-like chunk, remove punctuation, uppercase, spaces->_
-        String trimmed = raw.trim();
-        // if model returned extra text, extract first "word" that looks like a label
-        String firstLine = trimmed.split("[\\r\\n]")[0];
-        String token = firstLine.split("\\s+")[0];
-        String cleaned = token.replaceAll("[^A-Za-z0-9_]", "").toUpperCase();
-        // try simple replacements (common spanish -> enum)
-        cleaned = cleaned.replaceAll(" ", "_");
-        // If result empty, fallback to UNKNOWN
-        return cleaned.isEmpty() ? IntentType.UNKNOWN.name() : cleaned;
-    }
 
 }
