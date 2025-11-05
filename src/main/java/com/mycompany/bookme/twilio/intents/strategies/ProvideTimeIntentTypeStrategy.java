@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
 import com.mycompany.bookme.twilio.intents.IntentType;
 import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
+import com.mycompany.bookme.twilio.utils.ConversationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -48,18 +48,7 @@ public class ProvideTimeIntentTypeStrategy implements IntentTypeStrategy {
             TimeExtractionDto extracted = objectMapper.readValue(json, TimeExtractionDto.class);
             if (nonNull(extracted.reservationHour())) {
                 ctx.setReservationHour(extracted.reservationHour());
-                // Verificar qué datos faltan y preguntar por el siguiente
-                if (isNull(ctx.getReservationDate())) {
-                    return "¿Para qué fecha desea la reserva?";
-                } else if (isNull(ctx.getPartySize())) {
-                    return "¿Para cuántas personas sería la reserva?";
-                } else {
-                    return String.format(
-                            "Entonces, desea reservar una mesa para el %s a las %s, para %d personas. ¿Es correcto?",
-                            ctx.getReservationDate(),
-                            ctx.getReservationHour(),
-                            ctx.getPartySize());
-                }
+                return ConversationUtils.getNextQuestionOrConfirmation(ctx);
             } else {
                 return "No pude entender la hora proporcionada. ¿Podría repetirla en formato hora:minutos o describirla de otra manera?";
             }

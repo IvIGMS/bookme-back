@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
 import com.mycompany.bookme.twilio.intents.IntentType;
 import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
+import com.mycompany.bookme.twilio.utils.ConversationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -45,18 +45,7 @@ public class ProvidePartySizeIntentTypeStrategy implements IntentTypeStrategy {
             PartySizeExtractionDto extracted = objectMapper.readValue(json, PartySizeExtractionDto.class);
             if (nonNull(extracted.partySize())) {
                 ctx.setPartySize(extracted.partySize());
-                // Verificar qué datos faltan y preguntar por el siguiente
-                if (isNull(ctx.getReservationDate())) {
-                    return "¿Para qué fecha desea la reserva?";
-                } else if (isNull(ctx.getReservationHour())) {
-                    return "¿A qué hora le gustaría reservar la mesa?";
-                } else {
-                    return String.format(
-                            "Entonces, desea reservar una mesa para el %s a las %s, para %d personas. ¿Es correcto?",
-                            ctx.getReservationDate(),
-                            ctx.getReservationHour(),
-                            ctx.getPartySize());
-                }
+                return ConversationUtils.getNextQuestionOrConfirmation(ctx);
             } else {
                 return "No pude entender el número de personas proporcionado. ¿Podría repetir el número de comensales?";
             }

@@ -5,11 +5,11 @@ import com.mycompany.bookme.tools.DateTimeTools;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
 import com.mycompany.bookme.twilio.intents.IntentType;
 import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
+import com.mycompany.bookme.twilio.utils.ConversationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -51,23 +51,7 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
             return "Lo siento, hubo un error al procesar su solicitud. ¿Podría intentarlo de nuevo?";
         }
 
-        if (isNull(ctx.getReservationDate())) {
-            return "¿Para qué fecha desea la reserva?";
-        }
-        if (isNull(ctx.getReservationHour())) {
-            return "¿A qué hora le gustaría reservar la mesa?";
-        }
-        if (isNull(ctx.getPartySize())) {
-            return "¿Para cuántas personas sería la reserva?";
-        }
-
-        // Todos los datos presentes
-        return String.format(
-                "Entonces, desea reservar una mesa para el %s a las %s, para %d personas. ¿Es correcto?",
-                ctx.getReservationDate(),
-                ctx.getReservationHour(),
-                ctx.getPartySize()
-        );
+        return ConversationUtils.getNextQuestionOrConfirmation(ctx);
     }
 
     private static String getSystemInstructions() {
