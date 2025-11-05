@@ -49,9 +49,7 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
                 ctx.setPartySize(extractedInfo.getPartySize());
             }
 
-        } catch (IllegalArgumentException e) {
-            return "Lo siento, no pude entender su solicitud. ¿Podría reformularla?";
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             return "Lo siento, hubo un error al procesar su solicitud. ¿Podría intentarlo de nuevo?";
         }
 
