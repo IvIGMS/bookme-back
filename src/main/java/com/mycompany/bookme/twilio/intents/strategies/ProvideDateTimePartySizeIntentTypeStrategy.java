@@ -43,7 +43,7 @@ public class ProvideDateTimePartySizeIntentTypeStrategy implements IntentTypeStr
                 ctx.setPartySize(extractedInfo.getPartySize());
             }
         } catch (Exception e) {
-            // Log the exception (omitted for brevity)
+            log.error("Failed to extract reservation information from JSON: {}", json, e);
         }
 
         if (isNull(ctx.getReservationDate())) {
