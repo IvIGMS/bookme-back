@@ -30,12 +30,15 @@ public class DetectIntentWithAIService {
     }
 
     private String getLlmClassification(String userInput, String intentTypes) {
-        String llmIntentClassification = Objects.requireNonNull(chatClient.prompt(PROMPT.formatted(intentTypes))
-                        .user(userInput)
-                        .call()
-                        .content())
-                .trim()
-                .toUpperCase();
+        String content = chatClient.prompt(PROMPT.formatted(intentTypes))
+                .user(userInput)
+                .call()
+                .content();
+        if(content == null || content.trim().isEmpty()) {
+            log.warn("LLM returned null or empty classification, defaulting to UNKNOWN");
+            return IntentType.UNKNOWN.name();
+        }
+        String llmIntentClassification = content.trim().toUpperCase();
         log.info("LLM classified user input as intent type '{}'", llmIntentClassification);
         return llmIntentClassification;
     }

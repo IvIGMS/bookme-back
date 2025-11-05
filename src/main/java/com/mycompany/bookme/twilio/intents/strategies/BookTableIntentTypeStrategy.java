@@ -41,7 +41,7 @@ public class BookTableIntentTypeStrategy implements IntentTypeStrategy {
                         {"reservationDate": "yyyy-MM-dd", "reservationHour": "HH:mm", "partySize": N}
                         Responde solo con el JSON solicitado, sin explicaciones adicionales.
                         Si no puedes extraer alguno de los datos, asigna null a esa clave, sin comillas, por ejemplo: "partySize": null.
-                        Ten en cuenta que 
+                        Ten en cuenta que la hora puede estar en formato de 12 horas con AM/PM o en formato de 24 horas.
                         """)
                 .user(ctx.getCurrentUserMessage())
                 .tools(new DateTimeTools())
