@@ -29,8 +29,7 @@ public class DetectIntentWithAIService {
 
     public IntentType detect(String userInput, String conversationId) {
         log.info("Detecting intent for user input: {}", userInput);
-        List<Message> memoryMessages = chatMemory.get(conversationId);
-        String classification = getLlmClassification(memoryMessages, userInput);
+        String classification = getLlmClassification(userInput, conversationId);
         IntentType intentType = IntentType.fromStringOrDefault(classification);
         log.info("Detected intent type: {} (raw LLM: '{}')", intentType, classification);
         return intentType;
@@ -43,13 +42,10 @@ public class DetectIntentWithAIService {
                 .collect(Collectors.joining(", "));
     }
 
-    private String getLlmClassification(List<Message> memoryMessages, String userInput) {
-        String intentTypes = getIntentTypesDelimitedByCommas();
-        String systemInstruction = String.format(PROMPT_TEMPLATE, intentTypes);
-
-        // Construimos prompt que incluye memoria (si existe) y el texto actual.
-        Prompt prompt = new Prompt(memoryMessages == null ? List.of() : memoryMessages);
-
+    private String getLlmClassification(String userInput, String conversationId) {
+        List<Message> memoryMessages = chatMemory.get(conversationId);
+        Prompt prompt = new Prompt(memoryMessages);
+        String systemInstruction = String.format(PROMPT_TEMPLATE, getIntentTypesDelimitedByCommas());
         String userInstruction = "Frase a clasificar: \"" + userInput.trim() + "\"";
 
         String llmIntentClassification = chatClient

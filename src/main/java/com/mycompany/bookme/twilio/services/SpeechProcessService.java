@@ -76,7 +76,7 @@ public class SpeechProcessService {
     }
 
     private void addUserChatMemory(String conversationId, String text) {
-        chatMemory.add(conversationId, UserMessage.builder().text(text).build());
+        chatMemory.add(conversationId, new UserMessage(text));
     }
 
     private static void validate(String callSid) {
