@@ -32,7 +32,7 @@ public class ProvideDateTimePartySizeIntentTypeStrategy implements IntentTypeStr
                 .call()
                 .content();
         try {
-            ConversationCtx extractedInfo = objectMapper.convertValue(json, ConversationCtx.class);
+            ConversationCtx extractedInfo = objectMapper.readValue(json, ConversationCtx.class);
             if (nonNull(extractedInfo.getReservationDate())) {
                 ctx.setReservationDate(extractedInfo.getReservationDate());
             }
