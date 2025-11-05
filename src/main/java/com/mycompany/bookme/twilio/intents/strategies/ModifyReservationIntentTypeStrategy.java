@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static java.util.Objects.nonNull;
-
 @Component
 @RequiredArgsConstructor
 public class ModifyReservationIntentTypeStrategy implements IntentTypeStrategy {
@@ -46,20 +44,23 @@ public class ModifyReservationIntentTypeStrategy implements IntentTypeStrategy {
 
         try {
             ModificationDto extracted = objectMapper.readValue(json, ModificationDto.class);
-            if (nonNull(extracted.field()) && nonNull(extracted.newValue())) {
-                switch (extracted.field()) {
-                    case "reservationDate" -> ctx.setReservationDate(LocalDate.parse(extracted.newValue()));
-                    case "reservationHour" -> ctx.setReservationHour(LocalTime.parse(extracted.newValue()));
-                    case "partySize" -> ctx.setPartySize(Integer.valueOf(extracted.newValue()));
-                    case "reservationName" -> ctx.setReservationName(extracted.newValue());
-                    default -> {
-                        return "No pude identificar qué campo modificar. Por favor, especifique claramente qué cambiar.";
-                    }
-                }
-                return "Modificación realizada. " + ConversationUtils.getNextQuestionOrConfirmation(ctx);
-            } else {
-                return "No pude entender la modificación solicitada. ¿Podría repetir qué quiere cambiar y el nuevo valor?";
+            if (extracted.field() == null) {
+                return "Entiendo que desea modificar su reserva. ¿Qué le gustaría cambiar: fecha, hora, número de personas o nombre?";
             }
+            if (extracted.newValue() == null) {
+                return "Entiendo que quiere cambiar " + extracted.field() + ". ¿Cuál es el nuevo valor?";
+            }
+            // Proceder con la modificación
+            switch (extracted.field()) {
+                case "reservationDate" -> ctx.setReservationDate(LocalDate.parse(extracted.newValue()));
+                case "reservationHour" -> ctx.setReservationHour(LocalTime.parse(extracted.newValue()));
+                case "partySize" -> ctx.setPartySize(Integer.valueOf(extracted.newValue()));
+                case "reservationName" -> ctx.setReservationName(extracted.newValue());
+                default -> {
+                    return "No pude identificar qué campo modificar. Por favor, especifique claramente qué cambiar.";
+                }
+            }
+            return "Modificación realizada. " + ConversationUtils.getNextQuestionOrConfirmation(ctx);
         } catch (JsonProcessingException | IllegalArgumentException e) {
             return "Lo siento, hubo un error al procesar la modificación. ¿Podría intentarlo de nuevo?";
         }
