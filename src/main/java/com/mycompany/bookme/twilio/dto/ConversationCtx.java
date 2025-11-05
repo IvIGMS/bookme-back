@@ -28,5 +28,10 @@ public final class ConversationCtx {
         this.partySize = partySize;
     }
 
-
+    public void clearReservationDetails() {
+        this.reservationDate = null;
+        this.reservationHour = null;
+        this.partySize = null;
+        this.reservationName = null;
+    }
 }
