@@ -1,13 +1,14 @@
 package com.mycompany.bookme.restaurant.service;
 
-import com.mycompany.bookme.exceptions.NotFoundException;
-import com.mycompany.bookme.model.RestaurantDTO;
-import com.mycompany.bookme.model.RestaurantRequestDTO;
-import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantEntity;
-import com.mycompany.bookme.restaurant.dao.repositories.RestaurantRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import com.mycompany.bookme.exceptions.NotFoundException;
+import com.mycompany.bookme.model.RestaurantDTO;
+import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantEntity;
+import com.mycompany.bookme.restaurant.dao.repositories.RestaurantRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
