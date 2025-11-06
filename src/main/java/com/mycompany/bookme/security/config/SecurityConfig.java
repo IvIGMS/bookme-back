@@ -46,8 +46,7 @@ public class SecurityConfig {
                         "api/v1/colors/**")
                     .permitAll()
                     .anyRequest()
-//                    .authenticated()
-                    .permitAll() // Temporarily allow all requests
+                    .authenticated()
         )
         .authenticationProvider(authenticationProvider())
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
