@@ -1,19 +1,19 @@
 package com.mycompany.bookme.restaurant.service;
 
-import com.mycompany.bookme.exceptions.NotFoundException;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mycompany.bookme.model.RestaurantDTO;
 import com.mycompany.bookme.model.RestaurantRequestDTO;
 import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantEntity;
 import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantUserEntity;
-import com.mycompany.bookme.restaurant.dao.repositories.RestaurantRepository;
 import com.mycompany.bookme.restaurant.dao.repositories.RestaurantUserRepository;
 import com.mycompany.bookme.security.dao.models.entities.UserEntity;
 import com.mycompany.bookme.security.dao.models.enums.RoleUserEnum;
 import com.mycompany.bookme.security.services.UserService;
+
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

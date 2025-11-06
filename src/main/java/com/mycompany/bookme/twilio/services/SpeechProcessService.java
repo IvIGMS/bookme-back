@@ -1,5 +1,13 @@
 package com.mycompany.bookme.twilio.services;
 
+import static java.util.Objects.*;
+
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.mycompany.bookme.twilio.config.TwilioProperties;
 import com.mycompany.bookme.twilio.dto.ConversationCtx;
 import com.mycompany.bookme.twilio.intents.IntentType;
@@ -8,15 +16,9 @@ import com.mycompany.bookme.twilio.intents.IntentTypeStrategy;
 import com.mycompany.bookme.twilio.utils.TwiMLHelper;
 import com.twilio.twiml.VoiceResponse;
 import com.twilio.twiml.voice.Say;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import static java.util.Objects.isNull;
 
 @Service
 @Slf4j
