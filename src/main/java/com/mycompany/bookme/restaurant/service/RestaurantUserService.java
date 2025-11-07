@@ -2,6 +2,7 @@ package com.mycompany.bookme.restaurant.service;
 
 import com.mycompany.bookme.exceptions.ConflictException;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,14 +44,11 @@ public class RestaurantUserService {
     }
 
     public boolean isTheUserLinkedToTheRestaurant(Long userId, Long restaurantId) {
-        return restaurantUserRepository.findByIdUserIdAndIdRestaurantId(userId, restaurantId).isPresent();
+        return restaurantUserRepository.existsByIdUserIdAndIdRestaurantId(userId, restaurantId);
     }
 
-    public RestaurantDTO getRestaurantById(Long restaurantId, Long userId) {
-        if(isTheUserLinkedToTheRestaurant(userId, restaurantId)) {
-            return restaurantService.getRestaurantById(restaurantId);
-        } else {
-            throw new ConflictException("No tiene permisos para acceder al recurso");
-        }
+    @PreAuthorize("@authz.canAccessRestaurant(#restaurantId, authentication)")
+    public RestaurantDTO getRestaurantById(Long restaurantId) {
+        return restaurantService.getRestaurantById(restaurantId);
     }
 }
