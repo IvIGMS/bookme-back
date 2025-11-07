@@ -1,17 +1,13 @@
 package com.mycompany.bookme.exceptions.mappers;
 
 
-import com.mycompany.bookme.customer.dao.models.entities.CustomerEntity;
-import com.mycompany.bookme.exceptions.utils.AuditableEntity;
-import com.mycompany.bookme.model.AuditableDTO;
-import com.mycompany.bookme.model.CustomerDTO;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 @Configuration
 public class ModelMapperConfig {

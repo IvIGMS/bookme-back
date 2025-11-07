@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -24,14 +25,14 @@ public abstract class AuditableEntity {
 
   @PrePersist
   void prePersist() {
-    OffsetDateTime now = OffsetDateTime.now();
+    OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
     if (createdAt == null) createdAt = now;
     if (updatedAt == null) updatedAt = now;
   }
 
   @PreUpdate
   void preUpdate() {
-    updatedAt = OffsetDateTime.now();
+    updatedAt = OffsetDateTime.now(ZoneOffset.UTC);
   }
 }
 

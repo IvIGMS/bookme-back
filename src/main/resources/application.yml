@@ -1,7 +1,17 @@
 spring:
   profiles:
     default: local
-
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:your-openai-api-key}
+      chat:
+        client:
+          connect-timeout: 1s
+          read-timeout: 3s
+          max-tokens: 80
+        options:
+          model: gpt-3.5-turbo # gpt-4o-mini, gpt-3.5-turbo, usar modelo local ligero tipo "qwen" o Distilbert?
+          temperature: 0.7
   application:
     name: bookme-back
 
@@ -51,3 +61,8 @@ info:
   app:
     version: @project.version@
     active-profile: ${spring.profiles.active:default}
+
+#Twilio
+twilio:
+  speech:
+    confidence-threshold: 0.7

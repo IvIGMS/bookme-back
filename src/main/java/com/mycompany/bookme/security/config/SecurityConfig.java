@@ -1,8 +1,5 @@
 package com.mycompany.bookme.security.config;
 
-import com.mycompany.bookme.security.dao.repositories.UserRepository;
-import com.mycompany.bookme.security.services.JwtService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.mycompany.bookme.security.dao.repositories.UserRepository;
+import com.mycompany.bookme.security.services.JwtService;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -46,7 +48,8 @@ public class SecurityConfig {
                         "api/v1/colors/**")
                     .permitAll()
                     .anyRequest()
-                    .authenticated())
+                    .authenticated()
+        )
         .authenticationProvider(authenticationProvider())
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();

@@ -1,17 +1,19 @@
 package com.mycompany.bookme.restaurant.controllers;
 
+import static com.mycompany.bookme.exceptions.utils.ControllerUtilsConstants.*;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.mycompany.bookme.api.RestaurantsApi;
 import com.mycompany.bookme.exceptions.utils.ControllerUtils;
 import com.mycompany.bookme.model.RestaurantDTO;
 import com.mycompany.bookme.model.RestaurantRequestDTO;
 import com.mycompany.bookme.restaurant.service.RestaurantService;
 import com.mycompany.bookme.restaurant.service.RestaurantUserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import static com.mycompany.bookme.exceptions.utils.ControllerUtilsConstants.STRING_NO_PREMISSIONS;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("api/v1")
