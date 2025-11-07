@@ -32,5 +32,15 @@ public class RestaurantController extends ControllerUtils implements Restaurants
         return ResponseEntity.created(null).body(
                 restaurantUserService.createRestaurant(restaurantRequestDTO, ownerId));
     }
+
+    @Override
+    public ResponseEntity<RestaurantDTO> getRestaurantById(Long restaurantId) {
+        if (!checkIsUser()) {
+            throw new com.ivanfrias.generic_project.exceptions.utils.UnauthorizedException(STRING_NO_PREMISSIONS);
+        }
+        Long ownerId = getUserIdClaim();
+        return ResponseEntity.ok(restaurantUserService.getRestaurantById(restaurantId, ownerId));
+
+    }
 }
 

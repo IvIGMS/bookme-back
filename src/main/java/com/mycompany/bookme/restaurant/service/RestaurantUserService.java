@@ -1,5 +1,6 @@
 package com.mycompany.bookme.restaurant.service;
 
+import com.mycompany.bookme.exceptions.ConflictException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,5 +40,17 @@ public class RestaurantUserService {
                 .build());
         // todo: arreglar mapper para la auditoría
         return modelMapper.map(restaurantEntitySaved, RestaurantDTO.class);
+    }
+
+    public boolean isTheUserLinkedToTheRestaurant(Long userId, Long restaurantId) {
+        return restaurantUserRepository.findByIdUserIdAndIdRestaurantId(userId, restaurantId).isPresent();
+    }
+
+    public RestaurantDTO getRestaurantById(Long restaurantId, Long userId) {
+        if(isTheUserLinkedToTheRestaurant(userId, restaurantId)) {
+            return restaurantService.getRestaurantById(restaurantId);
+        } else {
+            throw new ConflictException("No tiene permisos para acceder al recurso");
+        }
     }
 }

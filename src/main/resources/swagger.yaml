@@ -10,6 +10,28 @@ tags:
 security:
   - bearerAuth: []
 paths:
+  /restaurants/{restaurantId}:
+    get:
+      summary: get a restaurant by id
+      description: you just can show restaurants linked to you. As admin or as a user
+      operationId: getRestaurantById
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/RestaurantResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - restaurants
   /restaurants:
     post:
       summary: create a new restaurant
@@ -168,6 +190,12 @@ components:
             $ref: '#/components/schemas/RegisterRequestDTO'
 
   parameters:
+    restaurantId:
+      name: restaurantId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/genericId'
     customerId:
       name: customerId
       in: path
