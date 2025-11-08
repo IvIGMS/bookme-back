@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.2
 info:
   title: generic-project
   version: v1
@@ -14,11 +14,54 @@ tags:
 security:
   - bearerAuth: []
 paths:
+  /opening-hours/default/{restaurantId}:
+    get:
+      summary: get opening hours default by a restaurant id
+      description: you just can show opening hours default for restaurants linked to you. As admin or as a user
+      operationId: getOpeningHoursDafult
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/OpeningHourDefaultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - openingHours
   /opening-hours/default:
     post:
       summary: create a complete new opening hour default
-      description: when you create a new openingHourDefault you must to have access to the restaurant and send every day of the week
+      description: when you create a new openingHourDefault you must to have access to the restaurant and send the days that you want to open your restaurant. If you don't send some day, the day it's going to be created like close day. Yo can't send a day with times in null, you have to send the object without this day.
       operationId: createOpeningHourDefault
+      requestBody:
+        $ref: '#/components/requestBodies/OpeningHourDefaultCreateRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/OpeningHourDefaultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - openingHours
+    put:
+      summary: update a complete new opening hour default
+      description: when you update a new openingHourDefault you must to have access to the restaurant and send every day of the week. Only you have to send the days that you want to change and if you want to close one day new per week you have to pass the day with times = null
+      operationId: updateOpeningHourDefault
       requestBody:
         $ref: '#/components/requestBodies/OpeningHourDefaultCreateRequestBody'
       responses:
@@ -446,9 +489,6 @@ components:
           $ref: '#/components/schemas/LocalTimeString'
         closingTime:
           $ref: '#/components/schemas/LocalTimeString'
-      required:
-        - openingTime
-        - closingTime
     CustomerRequestDTO:
       type: object
       properties:
