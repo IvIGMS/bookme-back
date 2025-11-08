@@ -164,7 +164,7 @@ public class OpeningHourDefaultService {
 
     private void validateTime(String value) {
         if (value == null) {
-            throw new IllegalArgumentException("La hora es obligatoria");
+            throw new IllegalArgumentException("La hora es obligatoria para la creación si se le pasa el día.");
         }
         if (!TIME_PATTERN.matcher(value).matches()) {
             throw new ConflictException("La hora debe cumplir el patrón HH:mm (p.ej. 13:00)");
@@ -184,7 +184,7 @@ public class OpeningHourDefaultService {
     }
 
     @PreAuthorize("@authz.canAccessRestaurant(#restaurantId, authentication)")
-    public OpeningHourDefaultCompleteResponseDTO getOpeningHoursDafult(Long restaurantId) {
+    public OpeningHourDefaultCompleteResponseDTO getOpeningHoursDefault(Long restaurantId) {
         List<OpeningHourDefaultEntity> openingHourDefaultEntities =
                 openingHourRepository.findByRestaurant_IdOrderByDayOfWeekAscOpeningTimeAsc(restaurantId);
 
