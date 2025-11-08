@@ -197,6 +197,12 @@
 							<generatorName>spring</generatorName> <!-- Generador para Spring Boot -->
 							<apiPackage>com.mycompany.bookme.api</apiPackage> <!-- Paquete para las interfaces de la API -->
 							<modelPackage>com.mycompany.bookme.model</modelPackage> <!-- Paquete para los modelos -->
+							<typeMappings>
+								<typeMapping>string+time=java.time.LocalTime</typeMapping> <!-- NUEVO -->
+							</typeMappings>
+							<importMappings>
+								<importMapping>LocalTime=java.time.LocalTime</importMapping> <!-- NUEVO -->
+							</importMappings>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly> <!-- Solo genera interfaces, no implementaciones -->
 								<useSpringBoot3>true</useSpringBoot3> <!-- Habilita soporte para Spring Boot 3.x -->
@@ -204,6 +210,7 @@
 								<fullyQualifiedNames>false</fullyQualifiedNames>
 								<useFullyQualifiedModelNames>false</useFullyQualifiedModelNames>
 								<sourceFolder>src/main/java</sourceFolder>
+								<dateLibrary>java8</dateLibrary>
 								<additionalModelTypeAnnotations>
 									@lombok.Data
 									@lombok.NoArgsConstructor
