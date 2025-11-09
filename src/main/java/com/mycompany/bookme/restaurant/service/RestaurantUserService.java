@@ -1,8 +1,6 @@
 package com.mycompany.bookme.restaurant.service;
 
-import com.mycompany.bookme.exceptions.ConflictException;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +8,6 @@ import com.mycompany.bookme.model.RestaurantDTO;
 import com.mycompany.bookme.model.RestaurantRequestDTO;
 import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantEntity;
 import com.mycompany.bookme.restaurant.dao.models.entities.RestaurantUserEntity;
-import com.mycompany.bookme.restaurant.dao.repositories.RestaurantUserRepository;
 import com.mycompany.bookme.security.dao.models.entities.UserEntity;
 import com.mycompany.bookme.security.dao.models.enums.RoleUserEnum;
 import com.mycompany.bookme.security.services.UserService;
@@ -20,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RestaurantUserService {
-    private final RestaurantUserRepository restaurantUserRepository;
     private final RestaurantService restaurantService;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -41,14 +37,5 @@ public class RestaurantUserService {
                 .build());
         // todo: arreglar mapper para la auditoría
         return modelMapper.map(restaurantEntitySaved, RestaurantDTO.class);
-    }
-
-    public boolean isTheUserLinkedToTheRestaurant(Long userId, Long restaurantId) {
-        return restaurantUserRepository.existsByIdUserIdAndIdRestaurantId(userId, restaurantId);
-    }
-
-    @PreAuthorize("@authz.canAccessRestaurant(#restaurantId, authentication)")
-    public RestaurantDTO getRestaurantById(Long restaurantId) {
-        return restaurantService.getRestaurantById(restaurantId);
     }
 }

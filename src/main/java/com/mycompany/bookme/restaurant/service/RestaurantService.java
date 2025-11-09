@@ -1,6 +1,7 @@
 package com.mycompany.bookme.restaurant.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.bookme.exceptions.NotFoundException;
@@ -20,6 +21,7 @@ public class RestaurantService {
         return restaurantRepository.save(restaurantEntity);
     }
 
+    @PreAuthorize("@authz.canAccessRestaurant(#restaurantId, authentication)")
     public RestaurantDTO getRestaurantById(Long restaurantId) {
         RestaurantEntity restaurantEntity = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException("Restaurant not found: " + restaurantId));

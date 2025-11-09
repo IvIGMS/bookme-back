@@ -35,7 +35,7 @@ public class RestaurantController extends ControllerUtils implements Restaurants
 
     @Override
     public ResponseEntity<RestaurantDTO> getRestaurantById(Long restaurantId) {
-        return ResponseEntity.ok(restaurantUserService.getRestaurantById(restaurantId));
+        return ResponseEntity.ok(restaurantService.getRestaurantById(restaurantId));
     }
 }
 
