@@ -425,17 +425,6 @@ components:
       type: string
       example: "14:30"
       pattern: "^([01]\\d|2[0-3]):([0-5]\\d)$"
-    AuditableDTO:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          example: "2024-01-01 14:30"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2024-01-01 14:30"
     RestaurantRequestDTO:
       type: object
       properties:
@@ -521,8 +510,14 @@ components:
         closeNextDay:
           type: boolean
           example: false
-        auditable:
-          $ref: '#/components/schemas/AuditableDTO'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
     RestaurantDTO:
       type: object
       properties:
@@ -537,8 +532,14 @@ components:
         phone:
           type: string
           example: 600000000
-        auditable:
-          $ref: '#/components/schemas/AuditableDTO'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
     CustomerDTO:
       type: object
       properties:
@@ -556,8 +557,14 @@ components:
         email:
           type: string
           example: email
-        auditable:
-          $ref: '#/components/schemas/AuditableDTO'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
       required:
         - name
         - lastName
