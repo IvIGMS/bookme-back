@@ -38,4 +38,3 @@ public class RestaurantController extends ControllerUtils implements Restaurants
         return ResponseEntity.ok(restaurantService.getRestaurantById(restaurantId));
     }
 }
-
