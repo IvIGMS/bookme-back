@@ -27,16 +27,13 @@ public class OpeningHourDefaultEntity extends AuditableEntity {
   private Long id;
 
   @Column(name = "day_of_week", nullable = false)
-  private Integer dayOfWeek; // ISO-8601: 1=Lunes (Monday) ... 7=Domingo (Sunday)
+  private Integer dayOfWeek; // 1=Lunes (Monday) ... 0=Domingo (Sunday)
 
   @Column(name = "opening_time", nullable = false)
   private LocalTime openingTime;
 
   @Column(name = "closing_time")
   private LocalTime closingTime;
-
-  @Column(name = "close_next_day")
-  private boolean closeNextDay; // true si cierra tras medianoche (ej. 22:00-02:00)
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_id", nullable = false)

@@ -81,11 +81,8 @@ CREATE TABLE IF NOT EXISTS opening_hours_default (
   day_of_week    SMALLINT     NOT NULL CHECK (day_of_week BETWEEN 0 AND 6), -- 1=L ... 0=D
   opening_time   TIME,  -- solo hora
   closing_time   TIME,  -- solo hora
-  close_next_day BOOLEAN      NOT NULL DEFAULT FALSE, -- true si cierra tras medianoche
   created_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-  CONSTRAINT ck_ohd_time_order
-    CHECK (close_next_day = TRUE OR opening_time < closing_time)
+  updated_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_ohd_restaurant_day

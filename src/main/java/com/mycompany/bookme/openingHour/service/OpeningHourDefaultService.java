@@ -20,6 +20,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -46,23 +47,27 @@ public class OpeningHourDefaultService {
 
     private OpeningHourDefaultCompleteResponseDTO createOpeningHours(OpeningHourDefaultCompleteRequestDTO openingHourDefaultCompleteRequestDTO) {
         RestaurantEntity restaurantEntity = restaurantService.getRestaurantEntityById(openingHourDefaultCompleteRequestDTO.getRestaurantId());
-        List<OpeningHourDefaultDTO> dayList = new ArrayList<>();
+
+        List<OpeningHourDefaultEntity> dayListToSave = new ArrayList<>();
         openingHourDefaultCompleteRequestDTO.getOpeningHoursDefault().forEach(day -> {
             LocalTime openingTime = toLocalTime(day.getOpeningTime());
             LocalTime closingTime = toLocalTime(day.getClosingTime());
-            boolean closeNextDay = closeNextDay(openingTime, closingTime);
 
             OpeningHourDefaultEntity dayToBeSaved = OpeningHourDefaultEntity.builder()
                     .dayOfWeek(day.getDayOfWeek())
                     .openingTime(openingTime)
                     .closingTime(closingTime)
-                    .closeNextDay(closeNextDay)
                     .restaurant(restaurantEntity)
                     .build();
 
-            OpeningHourDefaultEntity daySaved = openingHourRepository.save(dayToBeSaved);
-            dayList.add(modelMapper.map(daySaved, OpeningHourDefaultDTO.class));
+            dayListToSave.add(dayToBeSaved);
         });
+
+        List<OpeningHourDefaultEntity> daysSaved = openingHourRepository.saveAll(dayListToSave);
+
+        List<OpeningHourDefaultDTO> dayList = daysSaved.stream()
+                .map(day -> modelMapper.map(day, OpeningHourDefaultDTO.class))
+                .toList();
 
         fillClosedDays(dayList, restaurantEntity);
 
@@ -75,31 +80,44 @@ public class OpeningHourDefaultService {
     private OpeningHourDefaultCompleteResponseDTO updateOpeningHours(OpeningHourDefaultCompleteRequestDTO openingHourDefaultCompleteRequestDTO) {
         RestaurantEntity restaurantEntity = restaurantService.getRestaurantEntityById(openingHourDefaultCompleteRequestDTO.getRestaurantId());
         List<OpeningHourDefaultDTO> dayList = new ArrayList<>();
+
+        List<OpeningHourDefaultEntity> foundDays = openingHourRepository.findByRestaurant_Id(restaurantEntity.getId());
+
+        if(foundDays.isEmpty()) {
+            throw new ConflictException("No se han encontrado horario por default para este restaurante");
+        }
+
+        Map<Integer, OpeningHourDefaultEntity> foundDaysMap = foundDays.stream()
+                .collect(Collectors.toMap(
+                        OpeningHourDefaultEntity::getDayOfWeek,
+                        e -> e
+                ));
+
         openingHourDefaultCompleteRequestDTO.getOpeningHoursDefault().forEach(day -> {
 
-            OpeningHourDefaultEntity openingHourDefaultEntity = openingHourRepository.findByRestaurant_IdAndDayOfWeek(restaurantEntity.getId(), day.getDayOfWeek())
-                    .orElseThrow(() -> new ConflictException("The day " + day.getDayOfWeek() + " has not been created before the put"));
+            OpeningHourDefaultEntity dayFound = foundDaysMap.get(day.getDayOfWeek());
+
+            if(Objects.isNull(dayFound)) {
+                throw new ConflictException("El día " + day.getDayOfWeek() + " no fue creado para este restaurante");
+            }
 
             // Se quiere dejar ese día como cerrado
             if(Objects.isNull(day.getOpeningTime()) && Objects.isNull(day.getClosingTime())) {
-                openingHourDefaultEntity.setOpeningTime(null);
-                openingHourDefaultEntity.setClosingTime(null);
-                openingHourDefaultEntity.setCloseNextDay(false);
+                dayFound.setOpeningTime(null);
+                dayFound.setClosingTime(null);
 
                 // Se añade al result de cambios
-                dayList.add(modelMapper.map(openingHourDefaultEntity, OpeningHourDefaultDTO.class));
+                dayList.add(modelMapper.map(dayFound, OpeningHourDefaultDTO.class));
             // Se quiere cambiar el horario para ese día.
             } else {
                 LocalTime openingTime = toLocalTime(day.getOpeningTime());
                 LocalTime closingTime = toLocalTime(day.getClosingTime());
-                boolean closeNextDay = closeNextDay(openingTime, closingTime);
 
-                openingHourDefaultEntity.setOpeningTime(openingTime);
-                openingHourDefaultEntity.setClosingTime(closingTime);
-                openingHourDefaultEntity.setCloseNextDay(closeNextDay);
+                dayFound.setOpeningTime(openingTime);
+                dayFound.setClosingTime(closingTime);
 
                 // Se añade al result de cambios
-                dayList.add(modelMapper.map(openingHourDefaultEntity, OpeningHourDefaultDTO.class));
+                dayList.add(modelMapper.map(dayFound, OpeningHourDefaultDTO.class));
             }
         });
 
@@ -116,20 +134,17 @@ public class OpeningHourDefaultService {
                         .filter(id -> !daysFilled.contains(id))
                         .toList();
 
+        List<OpeningHourDefaultEntity> emptyDaysToSave = new ArrayList<>();
         emptyDays.forEach(day -> {
             OpeningHourDefaultEntity emptyDay = OpeningHourDefaultEntity.builder()
                     .dayOfWeek(day)
-                    .closeNextDay(false)
                     .restaurant(restaurantEntity)
                     .build();
-            openingHourRepository.save(emptyDay);
+            emptyDaysToSave.add(emptyDay);
         });
-    }
 
-    private boolean closeNextDay(LocalTime openingTime, LocalTime closingTime) {
-        return openingTime.isAfter(closingTime);
+        openingHourRepository.saveAll(emptyDaysToSave);
     }
-
 
     private void validateCreateHours(OpeningHourDefaultCompleteRequestDTO dto) {
         dto.getOpeningHoursDefault().forEach(this::validateCreateDay);

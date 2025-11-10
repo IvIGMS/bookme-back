@@ -18,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,10 +42,14 @@ class OpeningHourDefaultServiceTest {
                 .closingTime("23:30")
                 .build();
 
+        OpeningHourDefaultEntity dayToSave = OpeningHourDefaultEntity.builder().build();
+
         when(repository.existsByRestaurant_Id(1L))
                 .thenReturn(false);
         when(restaurantService.getRestaurantEntityById(1L))
                 .thenReturn(restaurant);
+        when(repository.saveAll(any()))
+                .thenReturn(List.of(dayToSave));
         when(modelMapper.map(any(), eq(OpeningHourDefaultDTO.class)))
                 .thenReturn(openingHourDefaultDTO);
 
@@ -112,7 +115,9 @@ class OpeningHourDefaultServiceTest {
                 .closingTime("00:30")
                 .build();
 
-        OpeningHourDefaultRequestDTO tres = OpeningHourDefaultRequestDTO.builder().build();
+        OpeningHourDefaultRequestDTO tres = OpeningHourDefaultRequestDTO.builder()
+                .dayOfWeek(3)
+                .build();
 
         list.add(uno);
         list.add(dos);
@@ -153,7 +158,6 @@ class OpeningHourDefaultServiceTest {
                         .dayOfWeek(0)
                         .openingTime(LocalTime.of(18, 30))
                         .closingTime(LocalTime.of(23, 30))
-                        .closeNextDay(false)
                         .restaurant(RestaurantEntity.builder().id(1L).build())
                         .build(),
                 OpeningHourDefaultEntity.builder()
@@ -161,7 +165,6 @@ class OpeningHourDefaultServiceTest {
                         .dayOfWeek(0)
                         .openingTime(LocalTime.of(18, 30))
                         .closingTime(LocalTime.of(0, 30))
-                        .closeNextDay(true)
                         .restaurant(RestaurantEntity.builder().id(1L).build())
                         .build()
         );
@@ -173,29 +176,88 @@ class OpeningHourDefaultServiceTest {
 
         RestaurantEntity restaurant = RestaurantEntity.builder().build();
 
-        OpeningHourDefaultEntity openingHourDefaultEntity = OpeningHourDefaultEntity.builder()
+        OpeningHourDefaultEntity openingHourDefaultEntityOne = OpeningHourDefaultEntity.builder()
                 .id(1L)
-                .dayOfWeek(1)
+                .dayOfWeek(0)
                 .openingTime(LocalTime.of(18, 30))
                 .closingTime(LocalTime.of(23, 30))
-                .closeNextDay(false)
                 .build();
 
+        OpeningHourDefaultEntity openingHourDefaultEntityTwo = OpeningHourDefaultEntity.builder()
+                .id(2L)
+                .dayOfWeek(6)
+                .openingTime(LocalTime.of(18, 30))
+                .closingTime(LocalTime.of(0, 30))
+                .build();
+
+        OpeningHourDefaultEntity openingHourDefaultEntityThree = OpeningHourDefaultEntity.builder()
+                .id(2L)
+                .dayOfWeek(3)
+                .openingTime(LocalTime.of(18, 30))
+                .closingTime(LocalTime.of(0, 30))
+                .build();
+
+        List<OpeningHourDefaultEntity> openingHourDefaultEntityList = List.of(openingHourDefaultEntityOne, openingHourDefaultEntityTwo, openingHourDefaultEntityThree);
+
         OpeningHourDefaultDTO openingHourDefaultDTO = OpeningHourDefaultDTO.builder()
-                .dayOfWeek(0)
+                .dayOfWeek(1)
                 .openingTime("18:30")
                 .closingTime("23:30")
                 .build();
 
         when(restaurantService.getRestaurantEntityById(1L))
                 .thenReturn(restaurant);
-        when(repository.findByRestaurant_IdAndDayOfWeek(any(), any()))
-                .thenReturn(Optional.of(openingHourDefaultEntity));
+        when(repository.findByRestaurant_Id(any()))
+                .thenReturn(openingHourDefaultEntityList);
         when(modelMapper.map(any(), eq(OpeningHourDefaultDTO.class)))
                 .thenReturn(openingHourDefaultDTO);
 
         var results = service.updateOpeningHourDefault(requestDTO);
         assertNotNull(results);
+    }
+
+    @Test
+    void testUpdateOpeningHourDefault_ko_noDefaultOpeningHour() {
+        var requestDTO = createRequest(true);
+
+        RestaurantEntity restaurant = RestaurantEntity.builder().build();
+
+
+        List<OpeningHourDefaultEntity> openingHourDefaultEntityList = List.of();
+
+        when(restaurantService.getRestaurantEntityById(1L))
+                .thenReturn(restaurant);
+        when(repository.findByRestaurant_Id(any()))
+                .thenReturn(openingHourDefaultEntityList);
+
+        assertThrows(
+                ConflictException.class,
+                () -> service.updateOpeningHourDefault(requestDTO));
+    }
+
+    @Test
+    void testUpdateOpeningHourDefault_ko_aDayIsNotCreatedBefore() {
+        var requestDTO = createRequest(true);
+
+        RestaurantEntity restaurant = RestaurantEntity.builder().build();
+
+        OpeningHourDefaultEntity openingHourDefaultEntityOne = OpeningHourDefaultEntity.builder()
+                .id(1L)
+                .dayOfWeek(1)
+                .openingTime(LocalTime.of(18, 30))
+                .closingTime(LocalTime.of(23, 30))
+                .build();
+
+        List<OpeningHourDefaultEntity> openingHourDefaultEntityList = List.of(openingHourDefaultEntityOne);
+
+        when(restaurantService.getRestaurantEntityById(1L))
+                .thenReturn(restaurant);
+        when(repository.findByRestaurant_Id(any()))
+                .thenReturn(openingHourDefaultEntityList);
+
+        assertThrows(
+                ConflictException.class,
+                () -> service.updateOpeningHourDefault(requestDTO));
     }
 
     @Test
