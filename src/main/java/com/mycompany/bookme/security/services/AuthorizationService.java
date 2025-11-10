@@ -2,7 +2,6 @@ package com.mycompany.bookme.security.services;
 
 import com.mycompany.bookme.restaurant.dao.repositories.RestaurantUserRepository;
 import com.mycompany.bookme.table.dao.models.entities.TableEntity;
-import com.mycompany.bookme.table.dao.repositories.TableRepository;
 import com.mycompany.bookme.table.service.TableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
