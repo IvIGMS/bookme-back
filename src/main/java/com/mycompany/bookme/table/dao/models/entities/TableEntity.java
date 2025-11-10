@@ -36,6 +36,9 @@ public class TableEntity extends AuditableEntity {
   @Column(nullable = false)
   private Integer capacity;
 
+  @Column(length = 500)
+  private String observations;
+
   @ManyToOne
   @JoinColumn(name = "restaurant_id")
   private RestaurantEntity restaurant;

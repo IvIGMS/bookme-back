@@ -11,9 +11,79 @@ tags:
     description: Endpoints de restaurants
   - name: openingHours
     description: Endpoints de opening hours
+  - name: tables
+    description: Endpoints de opening tables
 security:
   - bearerAuth: []
 paths:
+  /tables:
+    post:
+      summary: post table for a restaurant
+      description: you just can add tables for restaurants linked to you. As admin or as a user
+      operationId: postTable
+      requestBody:
+        $ref: '#/components/requestBodies/TableCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/TableResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
+  /tables/{tableId}:
+    put:
+      summary: update table by a restaurant id
+      description: you just can update tables for restaurants linked to you. As admin or as a user
+      operationId: putTable
+      parameters:
+        - $ref: '#/components/parameters/tableId'
+      requestBody:
+        $ref: '#/components/requestBodies/TableUpdateRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/TableResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
+  /tables/{restaurantId}/restaurant:
+    get:
+      summary: get tables by a restaurant id
+      description: you just can show tables for restaurants linked to you. As admin or as a user
+      operationId: getTables
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/TablesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
   /opening-hours/default/{restaurantId}:
     get:
       summary: get opening hours default by a restaurant id
@@ -240,6 +310,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RestaurantRequestDTO'
+    TableCreateRequestBody:
+      description: Create a table for a restaurant
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableCreateRequestDTO'
+    TableUpdateRequestBody:
+      description: Update a table for a restaurant
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableUpdateRequestDTO'
     OpeningHourDefaultCreateRequestBody:
       description: Create a weekly opening hour default
       required: true
@@ -284,6 +368,12 @@ components:
             $ref: '#/components/schemas/RegisterRequestDTO'
 
   parameters:
+    tableId:
+      name: tableId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/genericId'
     restaurantId:
       name: restaurantId
       in: path
@@ -309,6 +399,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OpeningHourDefaultCompleteResponseDTO'
+    TablesResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TableDTO'
+    TableResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableDTO'
     CustomerResponse:
       description: OK.
       content:
@@ -453,6 +557,35 @@ components:
             $ref: '#/components/schemas/OpeningHourDefaultDTO'
       required:
         - restaurantId
+    TableCreateRequestDTO:
+      type: object
+      properties:
+        tableNumber:
+          type: integer
+          example: 4
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
+      required:
+        - tableNumber
+        - capacity
+        - restaurantId
+    TableUpdateRequestDTO:
+      type: object
+      properties:
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+      required:
+        - capacity
     OpeningHourDefaultCompleteRequestDTO:
       type: object
       properties:
@@ -510,6 +643,30 @@ components:
         closeNextDay:
           type: boolean
           example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+    TableDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/genericId'
+        tableNumber:
+          type: integer
+          example: 4
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
         createdAt:
           type: string
           format: date-time
