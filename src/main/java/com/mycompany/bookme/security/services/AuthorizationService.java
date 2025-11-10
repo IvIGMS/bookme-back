@@ -17,7 +17,11 @@ public class AuthorizationService {
         Long userId = null;
         if (details instanceof java.util.Map<?,?> map && map.get("user_id") != null) {
             Object id = map.get("user_id");
-            userId = (id instanceof Number) ? ((Number) id).longValue() : Long.valueOf(id.toString());
+            try {
+                userId = (id instanceof Number) ? ((Number) id).longValue() : Long.parseLong(id.toString());
+            } catch (NumberFormatException e) {
+                userId = null;
+            }
         }
         if (userId == null) return false;
 

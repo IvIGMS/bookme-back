@@ -158,7 +158,7 @@ public class OpeningHourDefaultService {
         }
 
         if ((open != null && close == null) || (open == null && close != null)) {
-            throw new ConflictException("El open y close deben estár los dos rellenos o los dos vacíos");
+            throw new ConflictException("El open y close deben estar los dos rellenos o los dos vacíos");
         }
     }
 

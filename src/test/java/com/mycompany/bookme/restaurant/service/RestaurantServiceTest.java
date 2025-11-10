@@ -67,7 +67,7 @@ class RestaurantServiceTest {
 
     @Test
     void getRestaurantById_notFound_throws() {
-        Long id = 99L;
+        long id = 99L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> service.getRestaurantById(id));
@@ -95,7 +95,7 @@ class RestaurantServiceTest {
 
     @Test
     void getRestaurantEntityById_notFound_throws() {
-        Long id = 123L;
+        long id = 123L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> service.getRestaurantEntityById(id));

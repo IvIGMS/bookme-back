@@ -28,7 +28,7 @@ public class OpeningHourController extends ControllerUtils implements OpeningHou
     }
 
     @Override
-    public ResponseEntity<OpeningHourDefaultCompleteResponseDTO> getOpeningHoursDafult(Long restaurantId) {
+    public ResponseEntity<OpeningHourDefaultCompleteResponseDTO> getOpeningHoursDefault(Long restaurantId) {
         return ResponseEntity.ok(openingHourDefaultService.getOpeningHoursDefault(restaurantId));
     }
 }

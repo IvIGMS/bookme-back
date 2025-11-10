@@ -18,7 +18,7 @@ paths:
     get:
       summary: get opening hours default by a restaurant id
       description: you just can show opening hours default for restaurants linked to you. As admin or as a user
-      operationId: getOpeningHoursDafult
+      operationId: getOpeningHoursDefault
       parameters:
         - $ref: '#/components/parameters/restaurantId'
       responses:
@@ -44,7 +44,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/OpeningHourDefaultCreateRequestBody'
       responses:
-        '200':
+        '201':
           $ref: '#/components/responses/OpeningHourDefaultResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -473,7 +473,7 @@ components:
           type: integer
           minimum: 0
           maximum: 6
-          description: "ISO-8601: 1=Lunes … 0=Domingo"
+          description: "1=Lunes … 0=Domingo"
         openingTime:
           $ref: '#/components/schemas/LocalTimeString'
         closingTime:
@@ -502,7 +502,7 @@ components:
           type: integer
           minimum: 0
           maximum: 6
-          description: "ISO-8601: 1=Lunes … 0=Domingo"
+          description: "1=Lunes … 0=Domingo"
         openingTime:
           $ref: '#/components/schemas/LocalTimeString'
         closingTime:

@@ -77,7 +77,7 @@ class OpeningHourControllerTest {
 
         // when
         ResponseEntity<OpeningHourDefaultCompleteResponseDTO> response =
-                openingHourController.getOpeningHoursDafult(restaurantId);
+                openingHourController.getOpeningHoursDefault(restaurantId);
 
         // then
         assertEquals(200, response.getStatusCodeValue());

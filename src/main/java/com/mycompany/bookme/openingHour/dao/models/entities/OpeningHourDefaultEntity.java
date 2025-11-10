@@ -27,15 +27,15 @@ public class OpeningHourDefaultEntity extends AuditableEntity {
   private Long id;
 
   @Column(name = "day_of_week", nullable = false)
-  private Integer dayOfWeek; // 1=Lunes ... 7=Domingo
+  private Integer dayOfWeek; // ISO-8601: 1=Lunes (Monday) ... 7=Domingo (Sunday)
 
   @Column(name = "opening_time", nullable = false)
-  private LocalTime openingTime; // TIME WITHOUT TIME ZONE
+  private LocalTime openingTime;
 
-  @Column(name = "closing_time", nullable = false)
-  private LocalTime closingTime; // TIME WITHOUT TIME ZONE
+  @Column(name = "closing_time")
+  private LocalTime closingTime;
 
-  @Column(name = "close_next_day", nullable = false)
+  @Column(name = "close_next_day")
   private boolean closeNextDay; // true si cierra tras medianoche (ej. 22:00-02:00)
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
