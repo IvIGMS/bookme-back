@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.time.OffsetTime;
 
 @Entity
 @Table(
@@ -30,10 +31,10 @@ public class OpeningHourDefaultEntity extends AuditableEntity {
   private Integer dayOfWeek; // 1=Lunes (Monday) ... 0=Domingo (Sunday)
 
   @Column(name = "opening_time", nullable = false)
-  private LocalTime openingTime;
+  private OffsetTime openingTime;
 
   @Column(name = "closing_time")
-  private LocalTime closingTime;
+  private OffsetTime closingTime;
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_id", nullable = false)

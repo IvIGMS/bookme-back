@@ -197,11 +197,12 @@
 							<generatorName>spring</generatorName> <!-- Generador para Spring Boot -->
 							<apiPackage>com.mycompany.bookme.api</apiPackage> <!-- Paquete para las interfaces de la API -->
 							<modelPackage>com.mycompany.bookme.model</modelPackage> <!-- Paquete para los modelos -->
-							<typeMappings>
-								<typeMapping>string+time=java.time.LocalTime</typeMapping> <!-- NUEVO -->
-							</typeMappings>
+							<schemaMappings>
+								<typeMapping>LocalTimeString=OffsetTime</typeMapping> <!-- NUEVO -->
+							</schemaMappings>
 							<importMappings>
 								<importMapping>LocalTime=java.time.LocalTime</importMapping> <!-- NUEVO -->
+                                <importMapping>OffsetTime=java.time.OffsetTime</importMapping>
 							</importMappings>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly> <!-- Solo genera interfaces, no implementaciones -->

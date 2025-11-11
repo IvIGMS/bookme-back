@@ -527,6 +527,7 @@ components:
   schemas:
     LocalTimeString:
       type: string
+      format: time
       example: "14:30"
       pattern: "^([01]\\d|2[0-3]):([0-5]\\d)$"
     RestaurantRequestDTO:

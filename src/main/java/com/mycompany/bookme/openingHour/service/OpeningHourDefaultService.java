@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -29,10 +30,6 @@ public class OpeningHourDefaultService {
     private final OpeningHourDefaultRepository openingHourRepository;
     private final ModelMapper modelMapper;
     private final RestaurantService restaurantService;
-
-
-    private static final Pattern TIME_PATTERN = Pattern.compile("^(?:[01]\\d|2[0-3]):[0-5]\\d$");
-    private static final DateTimeFormatter HH_MM = DateTimeFormatter.ofPattern("HH:mm");
 
     @Transactional
     @PreAuthorize("@authz.canAccessRestaurant(#req.restaurantId, authentication)")
@@ -50,8 +47,8 @@ public class OpeningHourDefaultService {
 
         List<OpeningHourDefaultEntity> dayListToSave = new ArrayList<>();
         openingHourDefaultCompleteRequestDTO.getOpeningHoursDefault().forEach(day -> {
-            LocalTime openingTime = toLocalTime(day.getOpeningTime());
-            LocalTime closingTime = toLocalTime(day.getClosingTime());
+            OffsetTime openingTime = day.getOpeningTime();
+            OffsetTime closingTime = day.getClosingTime();
 
             OpeningHourDefaultEntity dayToBeSaved = OpeningHourDefaultEntity.builder()
                     .dayOfWeek(day.getDayOfWeek())
@@ -110,8 +107,8 @@ public class OpeningHourDefaultService {
                 dayList.add(modelMapper.map(dayFound, OpeningHourDefaultDTO.class));
             // Se quiere cambiar el horario para ese día.
             } else {
-                LocalTime openingTime = toLocalTime(day.getOpeningTime());
-                LocalTime closingTime = toLocalTime(day.getClosingTime());
+                OffsetTime openingTime = day.getOpeningTime();
+                OffsetTime closingTime = day.getClosingTime();
 
                 dayFound.setOpeningTime(openingTime);
                 dayFound.setClosingTime(closingTime);
@@ -164,8 +161,8 @@ public class OpeningHourDefaultService {
     private void validateUpdateDay(OpeningHourDefaultRequestDTO dayDto) {
         if (dayDto == null) return;
 
-        String open = dayDto.getOpeningTime();
-        String close = dayDto.getClosingTime();
+        OffsetTime open = dayDto.getOpeningTime();
+        OffsetTime close = dayDto.getClosingTime();
 
         if (open != null && close != null) {
             validateTime(open);
@@ -177,17 +174,10 @@ public class OpeningHourDefaultService {
         }
     }
 
-    private void validateTime(String value) {
+    private void validateTime(OffsetTime value) {
         if (value == null) {
             throw new IllegalArgumentException("La hora es obligatoria para la creación si se le pasa el día.");
         }
-        if (!TIME_PATTERN.matcher(value).matches()) {
-            throw new ConflictException("La hora debe cumplir el patrón HH:mm (p.ej. 13:00)");
-        }
-    }
-
-    private LocalTime toLocalTime(String hhmm) {
-        return LocalTime.parse(hhmm, HH_MM);
     }
 
     @Transactional

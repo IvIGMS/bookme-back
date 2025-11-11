@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +40,8 @@ class OpeningHourDefaultServiceTest {
 
         OpeningHourDefaultDTO openingHourDefaultDTO = OpeningHourDefaultDTO.builder()
                 .dayOfWeek(0)
-                .openingTime("18:30")
-                .closingTime("23:30")
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                 .build();
 
         OpeningHourDefaultEntity dayToSave = OpeningHourDefaultEntity.builder().build();
@@ -85,34 +87,19 @@ class OpeningHourDefaultServiceTest {
                 () -> service.createOpeningHourDefault(requestDTO));
     }
 
-    @Test
-    void testCreateOpeningHourDefault_ko_patternHourFailed() {
-        OpeningHourDefaultCompleteRequestDTO requestDTO = OpeningHourDefaultCompleteRequestDTO.builder()
-                .restaurantId(1L)
-                .openingHoursDefault(List.of(OpeningHourDefaultRequestDTO.builder()
-                        .dayOfWeek(1)
-                        .openingTime("20:")
-                        .build()))
-                .build();
-
-        assertThrows(
-                ConflictException.class,
-                () -> service.createOpeningHourDefault(requestDTO));
-    }
-
     private OpeningHourDefaultCompleteRequestDTO createRequest(boolean update) {
         List<OpeningHourDefaultRequestDTO> list = new ArrayList<>();
 
         OpeningHourDefaultRequestDTO uno = OpeningHourDefaultRequestDTO.builder()
                 .dayOfWeek(0)
-                .openingTime("19:30")
-                .closingTime("23:30")
+                .openingTime(OffsetTime.of(LocalTime.of(19, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                 .build();
 
         OpeningHourDefaultRequestDTO dos = OpeningHourDefaultRequestDTO.builder()
                 .dayOfWeek(6)
-                .openingTime("20:30")
-                .closingTime("00:30")
+                .openingTime(OffsetTime.of(LocalTime.of(20, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(0, 30), ZoneOffset.UTC))
                 .build();
 
         OpeningHourDefaultRequestDTO tres = OpeningHourDefaultRequestDTO.builder()
@@ -136,8 +123,8 @@ class OpeningHourDefaultServiceTest {
     void testGetOpeningHoursDefault() {
         OpeningHourDefaultDTO openingHourDefaultDTO = OpeningHourDefaultDTO.builder()
                 .dayOfWeek(0)
-                .openingTime("18:30")
-                .closingTime("23:30")
+                .openingTime(OffsetTime.of(LocalTime.of(18,30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23,30), ZoneOffset.UTC))
                 .build();
 
         when(repository.findByRestaurant_IdOrderByDayOfWeekAscOpeningTimeAsc(1L))
@@ -156,15 +143,15 @@ class OpeningHourDefaultServiceTest {
                 OpeningHourDefaultEntity.builder()
                         .id(1L)
                         .dayOfWeek(0)
-                        .openingTime(LocalTime.of(18, 30))
-                        .closingTime(LocalTime.of(23, 30))
+                        .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                        .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                         .restaurant(RestaurantEntity.builder().id(1L).build())
                         .build(),
                 OpeningHourDefaultEntity.builder()
                         .id(2L)
                         .dayOfWeek(0)
-                        .openingTime(LocalTime.of(18, 30))
-                        .closingTime(LocalTime.of(0, 30))
+                        .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                        .closingTime(OffsetTime.of(LocalTime.of(0, 30), ZoneOffset.UTC))
                         .restaurant(RestaurantEntity.builder().id(1L).build())
                         .build()
         );
@@ -179,30 +166,30 @@ class OpeningHourDefaultServiceTest {
         OpeningHourDefaultEntity openingHourDefaultEntityOne = OpeningHourDefaultEntity.builder()
                 .id(1L)
                 .dayOfWeek(0)
-                .openingTime(LocalTime.of(18, 30))
-                .closingTime(LocalTime.of(23, 30))
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                 .build();
 
         OpeningHourDefaultEntity openingHourDefaultEntityTwo = OpeningHourDefaultEntity.builder()
                 .id(2L)
                 .dayOfWeek(6)
-                .openingTime(LocalTime.of(18, 30))
-                .closingTime(LocalTime.of(0, 30))
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(0, 30), ZoneOffset.UTC))
                 .build();
 
         OpeningHourDefaultEntity openingHourDefaultEntityThree = OpeningHourDefaultEntity.builder()
                 .id(2L)
                 .dayOfWeek(3)
-                .openingTime(LocalTime.of(18, 30))
-                .closingTime(LocalTime.of(0, 30))
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(0, 30), ZoneOffset.UTC))
                 .build();
 
         List<OpeningHourDefaultEntity> openingHourDefaultEntityList = List.of(openingHourDefaultEntityOne, openingHourDefaultEntityTwo, openingHourDefaultEntityThree);
 
         OpeningHourDefaultDTO openingHourDefaultDTO = OpeningHourDefaultDTO.builder()
                 .dayOfWeek(1)
-                .openingTime("18:30")
-                .closingTime("23:30")
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                 .build();
 
         when(restaurantService.getRestaurantEntityById(1L))
@@ -244,8 +231,8 @@ class OpeningHourDefaultServiceTest {
         OpeningHourDefaultEntity openingHourDefaultEntityOne = OpeningHourDefaultEntity.builder()
                 .id(1L)
                 .dayOfWeek(1)
-                .openingTime(LocalTime.of(18, 30))
-                .closingTime(LocalTime.of(23, 30))
+                .openingTime(OffsetTime.of(LocalTime.of(18, 30), ZoneOffset.UTC))
+                .closingTime(OffsetTime.of(LocalTime.of(23, 30), ZoneOffset.UTC))
                 .build();
 
         List<OpeningHourDefaultEntity> openingHourDefaultEntityList = List.of(openingHourDefaultEntityOne);
@@ -265,7 +252,7 @@ class OpeningHourDefaultServiceTest {
         OpeningHourDefaultCompleteRequestDTO requestDTO = OpeningHourDefaultCompleteRequestDTO.builder()
                 .restaurantId(1L)
                 .openingHoursDefault(List.of(OpeningHourDefaultRequestDTO.builder()
-                                .openingTime("18:30")
+                                .openingTime(OffsetTime.of(LocalTime.of(18,30), ZoneOffset.UTC))
                                 .dayOfWeek(1)
                         .build()))
                 .build();
