@@ -33,6 +33,5 @@ public class ReservationEntity extends AuditableEntity {
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private CustomerEntity customer;
-
 }
 

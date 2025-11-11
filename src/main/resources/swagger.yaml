@@ -7,9 +7,170 @@ tags:
     description: Endpoints de autenticación
   - name: customers
     description: Endpoints de customers
+  - name: restaurants
+    description: Endpoints de restaurants
+  - name: openingHours
+    description: Endpoints de opening hours
+  - name: tables
+    description: Endpoints de opening tables
 security:
   - bearerAuth: []
 paths:
+  /tables:
+    post:
+      summary: post table for a restaurant
+      description: you just can add tables for restaurants linked to you. As admin or as a user
+      operationId: postTable
+      requestBody:
+        $ref: '#/components/requestBodies/TableCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/TableResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
+  /tables/{tableId}:
+    put:
+      summary: update table by a restaurant id
+      description: you just can update tables for restaurants linked to you. As admin or as a user
+      operationId: putTable
+      parameters:
+        - $ref: '#/components/parameters/tableId'
+      requestBody:
+        $ref: '#/components/requestBodies/TableUpdateRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/TableResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
+  /tables/{restaurantId}/restaurant:
+    get:
+      summary: get tables by a restaurant id
+      description: you just can show tables for restaurants linked to you. As admin or as a user
+      operationId: getTables
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/TablesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - tables
+  /opening-hours/default/{restaurantId}:
+    get:
+      summary: get opening hours default by a restaurant id
+      description: you just can show opening hours default for restaurants linked to you. As admin or as a user
+      operationId: getOpeningHoursDefault
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/OpeningHourDefaultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - openingHours
+  /opening-hours/default:
+    post:
+      summary: create a complete new opening hour default
+      description: when you create a new openingHourDefault you must to have access to the restaurant and send the days that you want to open your restaurant. If you don't send some day, the day it's going to be created like close day. Yo can't send a day with times in null, you have to send the object without this day.
+      operationId: createOpeningHourDefault
+      requestBody:
+        $ref: '#/components/requestBodies/OpeningHourDefaultCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/OpeningHourDefaultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - openingHours
+    put:
+      summary: update a complete new opening hour default
+      description: when you update a new openingHourDefault you must to have access to the restaurant and send every day of the week. Only you have to send the days that you want to change and if you want to close one day new per week you have to pass the day with times = null
+      operationId: updateOpeningHourDefault
+      requestBody:
+        $ref: '#/components/requestBodies/OpeningHourDefaultCreateRequestBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/OpeningHourDefaultResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - openingHours
+  /restaurants/{restaurantId}:
+    get:
+      summary: get a restaurant by id
+      description: you just can show restaurants linked to you. As admin or as a user
+      operationId: getRestaurantById
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          $ref: '#/components/responses/RestaurantResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      tags:
+        - restaurants
   /restaurants:
     post:
       summary: create a new restaurant
@@ -31,7 +192,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
       tags:
-        - customers
+        - restaurants
   /customers/{customerId}:
     get:
       summary: get a customer by id
@@ -149,6 +310,45 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RestaurantRequestDTO'
+    TableCreateRequestBody:
+      description: Create a table for a restaurant
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableCreateRequestDTO'
+    TableUpdateRequestBody:
+      description: Update a table for a restaurant
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableUpdateRequestDTO'
+    OpeningHourDefaultCreateRequestBody:
+      description: Create a weekly opening hour default
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OpeningHourDefaultCompleteRequestDTO'
+          example:
+            restaurantId: 1
+            openingHoursDefault:
+              - dayOfWeek: 0
+                openingTime: "18:30"
+                closingTime: "23:30"
+              - dayOfWeek: 3
+                openingTime: "18:30"
+                closingTime: "23:30"
+              - dayOfWeek: 4
+                openingTime: "18:30"
+                closingTime: "23:30"
+              - dayOfWeek: 5
+                openingTime: "19:30"
+                closingTime: "00:30"
+              - dayOfWeek: 6
+                openingTime: "19:30"
+                closingTime: "00:30"
     AuthenticationRequestBody:
       description: Login de un user
       required: true
@@ -168,6 +368,18 @@ components:
             $ref: '#/components/schemas/RegisterRequestDTO'
 
   parameters:
+    tableId:
+      name: tableId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/genericId'
+    restaurantId:
+      name: restaurantId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/genericId'
     customerId:
       name: customerId
       in: path
@@ -181,6 +393,26 @@ components:
       schema:
         $ref: '#/components/schemas/genericId'
   responses:
+    OpeningHourDefaultResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OpeningHourDefaultCompleteResponseDTO'
+    TablesResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TableDTO'
+    TableResponse:
+      description: OK.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TableDTO'
     CustomerResponse:
       description: OK.
       content:
@@ -293,17 +525,11 @@ components:
                   One or more fields are invalid. See details for more information.
                 instance: 'https://api.example.com/problems/validation-error/12345'
   schemas:
-    AuditableDTO:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          example: "2024-01-01 14:30"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2024-01-01 14:30"
+    LocalTimeString:
+      type: string
+      format: time
+      example: "14:30"
+      pattern: "^([01]\\d|2[0-3]):([0-5]\\d)$"
     RestaurantRequestDTO:
       type: object
       properties:
@@ -320,6 +546,72 @@ components:
         - name
         - address
         - phone
+    OpeningHourDefaultCompleteResponseDTO:
+      type: object
+      properties:
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
+        openingHoursDefault:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OpeningHourDefaultDTO'
+      required:
+        - restaurantId
+    TableCreateRequestDTO:
+      type: object
+      properties:
+        tableNumber:
+          type: integer
+          example: 4
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
+      required:
+        - tableNumber
+        - capacity
+        - restaurantId
+    TableUpdateRequestDTO:
+      type: object
+      properties:
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+      required:
+        - capacity
+    OpeningHourDefaultCompleteRequestDTO:
+      type: object
+      properties:
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
+        openingHoursDefault:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OpeningHourDefaultRequestDTO'
+      required:
+        - restaurantId
+        - openingHoursDefault
+    OpeningHourDefaultRequestDTO:
+      type: object
+      properties:
+        dayOfWeek:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: "1=Lunes … 0=Domingo"
+        openingTime:
+          $ref: '#/components/schemas/LocalTimeString'
+        closingTime:
+          $ref: '#/components/schemas/LocalTimeString'
     CustomerRequestDTO:
       type: object
       properties:
@@ -335,6 +627,55 @@ components:
         email:
           type: string
           example: email
+    OpeningHourDefaultDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/genericId'
+        dayOfWeek:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: "1=Lunes … 0=Domingo"
+        openingTime:
+          $ref: '#/components/schemas/LocalTimeString'
+        closingTime:
+          $ref: '#/components/schemas/LocalTimeString'
+        closeNextDay:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+    TableDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/genericId'
+        tableNumber:
+          type: integer
+          example: 4
+        capacity:
+          type: integer
+          example: 4
+        observations:
+          type: string
+          example: "This table can be merged to another table"
+        restaurantId:
+          $ref: '#/components/schemas/genericId'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
     RestaurantDTO:
       type: object
       properties:
@@ -349,8 +690,14 @@ components:
         phone:
           type: string
           example: 600000000
-        auditable:
-          $ref: '#/components/schemas/AuditableDTO'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
     CustomerDTO:
       type: object
       properties:
@@ -368,8 +715,14 @@ components:
         email:
           type: string
           example: email
-        auditable:
-          $ref: '#/components/schemas/AuditableDTO'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-01 14:30"
       required:
         - name
         - lastName
